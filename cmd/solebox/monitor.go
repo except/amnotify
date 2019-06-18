@@ -210,7 +210,7 @@ func (p *sbxProduct) sendUpdate(webhookURL string) {
 
 	hookEmbed.Fields = append(hookEmbed.Fields, discordEmbedField{
 		Name:   "Important Links",
-		Value:  "[Start Card Checkout](https://www.solebox.com/index.php?lang=1&actcontrol=order&cl=order&fnc=execute&challenge=&ord_agb=1&oxdownloadableproductsagreement=0&oxserviceproductsagreement=0&ord_agb=1)\n[Start PayPal Checkout](https://www.solebox.com/index.php?pp=redirect&cl=payment&fnc=validatepayment&paymentid=globalpaypal)",
+		Value:  "[Start Card Checkout](https://www.solebox.com/index.php?cl=payment#payment_gs_kk_saferpay)\n[Start PayPal Checkout](https://www.solebox.com/index.php?pp=redirect&cl=payment&fnc=validatepayment&paymentid=globalpaypal)",
 		Inline: true,
 	})
 
