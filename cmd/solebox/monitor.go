@@ -198,7 +198,7 @@ func (p *sbxProduct) sendUpdate(webhookURL string) {
 	}
 
 	hookEmbed.Footer = discordEmbedFooter{
-		Text:    "AMNotify | Solebox",
+		Text:    fmt.Sprintf("AMNotify | Solebox • %v", time.Now().Format("15:04:05.000")),
 		IconURL: "https://i.imgur.com/vv2dyGR.png",
 	}
 
@@ -210,7 +210,7 @@ func (p *sbxProduct) sendUpdate(webhookURL string) {
 
 	hookEmbed.Fields = append(hookEmbed.Fields, discordEmbedField{
 		Name:   "Important Links",
-		Value:  "[Start PayPal Checkout](https://www.solebox.com/index.php?pp=redirect&cl=payment&fnc=validatepayment&paymentid=globalpaypal)\n[Other Payment Options](https://www.solebox.com/index.php?cl=payment&lang=1)",
+		Value:  "[Start Card Checkout](https://www.solebox.com/index.php?lang=1&actcontrol=order&cl=order&fnc=execute&challenge=&ord_agb=1&oxdownloadableproductsagreement=0&oxserviceproductsagreement=0&ord_agb=1)\n[Start PayPal Checkout](https://www.solebox.com/index.php?pp=redirect&cl=payment&fnc=validatepayment&paymentid=globalpaypal)",
 		Inline: true,
 	})
 
@@ -233,13 +233,13 @@ func (p *sbxProduct) sendUpdate(webhookURL string) {
 
 	for _, sizeAID := range availableSizeArr {
 		sizeName := p.SizeMap[sizeAID]
-		sizeString := fmt.Sprintf("[US %v](https://www.solebox.com/index.php?fnc=changebasket&aproducts[nike][aid]=%v&aproducts[nike][am]=1&cl=user&lang=1)", sizeName, sizeAID)
+		sizeString := fmt.Sprintf("[US %v](https://www.solebox.com/index.php?fnc=changebasket&aproducts[0][aid]=%v&aproducts[0][am]=1&cl=user&lang=1)", sizeName, sizeAID)
 		availableSizeStringArr = append(availableSizeStringArr, sizeString)
 	}
 
 	for _, sizeAID := range unavailableSizeArr {
 		sizeName := p.SizeMap[sizeAID]
-		sizeString := fmt.Sprintf("[~~US %v~~](https://www.solebox.com/index.php?fnc=changebasket&aproducts[nike][aid]=%v&aproducts[nike][am]=1&cl=user&lang=1)", sizeName, sizeAID)
+		sizeString := fmt.Sprintf("[~~US %v~~](https://www.solebox.com/index.php?fnc=changebasket&aproducts[0][aid]=%v&aproducts[0][am]=1&cl=user&lang=1)", sizeName, sizeAID)
 		unavailableSizeStringArr = append(unavailableSizeStringArr, sizeString)
 	}
 
