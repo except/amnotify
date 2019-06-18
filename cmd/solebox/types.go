@@ -33,13 +33,12 @@ type discordWebhook struct {
 }
 
 type discordEmbed struct {
-	Title       string                `json:"title"`
-	Description string                `json:"description"`
-	URL         string                `json:"url"`
-	Color       int                   `json:"color"`
-	Footer      discordEmbedFooter    `json:"footer"`
-	Thumbnail   discordEmbedThumbnail `json:"thumbnail"`
-	Fields      []discordEmbedField   `json:"fields"`
+	Title     string                `json:"title"`
+	URL       string                `json:"url"`
+	Color     int                   `json:"color"`
+	Footer    discordEmbedFooter    `json:"footer"`
+	Thumbnail discordEmbedThumbnail `json:"thumbnail"`
+	Fields    []discordEmbedField   `json:"fields"`
 }
 
 type discordEmbedFooter struct {

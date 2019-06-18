@@ -188,10 +188,9 @@ func (p *sbxProduct) sendUpdate(webhookURL string) {
 	hookStruct := &discordWebhook{}
 
 	hookEmbed := discordEmbed{
-		Title:       p.ProductInfo.ProductName,
-		Description: "Our page refresher slaves are really hitting.",
-		URL:         p.URL,
-		Color:       16721733,
+		Title: p.ProductInfo.ProductName,
+		URL:   p.URL,
+		Color: 16721733,
 	}
 
 	hookEmbed.Thumbnail = discordEmbedThumbnail{
@@ -200,7 +199,7 @@ func (p *sbxProduct) sendUpdate(webhookURL string) {
 
 	hookEmbed.Footer = discordEmbedFooter{
 		Text:    "AMNotify | Solebox",
-		IconURL: "https://pbs.twimg.com/profile_images/1081674471042240512/ZHoxoj_2_400x400.jpg",
+		IconURL: "https://i.imgur.com/vv2dyGR.png",
 	}
 
 	hookEmbed.Fields = append(hookEmbed.Fields, discordEmbedField{
@@ -290,8 +289,12 @@ func (p *sbxProduct) sendUpdate(webhookURL string) {
 
 	if resp.StatusCode == 204 {
 		log.Printf("[SUCCESS] Webhook Sent - %v", p.ProductInfo.ProductName)
+	} else if resp.StatusCode == 429 {
+		log.Printf("[WARN] Ratelimited - %v", p.ProductInfo.ProductName)
+		time.Sleep(5 * time.Second)
+		p.sendUpdate(webhookURL)
 	} else {
-		log.Printf("[WARN] Incorrect Status - %v - %v", p.ProductInfo.ProductName, resp.Status)
+		log.Printf("[WARN] Invalid Status - %v - %v", p.ProductInfo.ProductName, resp.Status)
 	}
 
 	return
