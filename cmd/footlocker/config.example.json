@@ -1,0 +1,90 @@
+{   
+    "SKUArray": [
+        {
+            "SKU": "",
+            "Regions": [""]
+        }
+    ],
+    "ProxyArray": [
+        ""
+    ],
+    "Regions": {
+        "DE": {   
+            "BaseUrl": "https://www.footlocker.de/INTERSHOP/web/WFS/Footlocker-Footlocker_DE-Site/de_DE/-/EUR",
+            "WebhookUrls": [
+                ""
+            ],
+            "CurrencySymbol": "€"
+        },
+        "GB": {   
+            "BaseUrl": "https://www.footlocker.co.uk/INTERSHOP/web/WFS/Footlocker-Footlocker_GB-Site/en_GB/-/GBP/",
+            "WebhookUrls": [
+                ""
+            ],
+            "CurrencySymbol": "£"
+        },
+        "NL": {   
+            "BaseUrl": "https://www.footlocker.nl/INTERSHOP/web/WFS/Footlocker-Footlocker_NL-Site/nl_NL/-/EUR/",
+            "WebhookUrls": [
+                ""
+            ],
+            "CurrencySymbol": "€"
+        },
+        "LU": {   
+            "BaseUrl": "https://www.footlocker.lu/INTERSHOP/web/WFS/Footlocker-Footlocker_LU-Site/fr_FR/-/EUR/",
+            "WebhookUrls": [
+                ""
+            ],
+            "CurrencySymbol": "€"
+        },
+        "BE": {   
+            "BaseUrl": "https://www.footlocker.be/INTERSHOP/web/WFS/Footlocker-Footlocker_BE-Site/fr_FR/-/EUR/",
+            "WebhookUrls": [
+                ""
+            ],
+            "CurrencySymbol": "€"
+        },
+        "IT": {   
+            "BaseUrl": "https://www.footlocker.it/INTERSHOP/web/WFS/Footlocker-Footlocker_IT-Site/it_IT/-/EUR/",
+            "WebhookUrls": [
+                ""
+            ],
+            "CurrencySymbol": "€"
+        },
+        "ES": {   
+            "BaseUrl": "https://www.footlocker.es/INTERSHOP/web/WFS/Footlocker-Footlocker_ES-Site/es_ES/-/EUR/",
+            "WebhookUrls": [
+                ""
+            ],
+            "CurrencySymbol": "€"
+        },
+        "FR": {   
+            "BaseUrl": "https://www.footlocker.fr/INTERSHOP/web/WFS/Footlocker-Footlocker_FR-Site/fr_FR/-/EUR/",
+            "WebhookUrls": [
+                ""
+            ],
+            "CurrencySymbol": "€"
+        },
+        "DK": {   
+            "BaseUrl": "https://www.footlocker.dk/INTERSHOP/web/WFS/Footlocker-Footlocker_DK-Site/en_GB/-/DKK/",
+            "WebhookUrls": [
+                ""
+            ],
+            "CurrencySymbol": "DKK"
+        },
+        "SE": {   
+            "BaseUrl": "https://www.footlocker.se/INTERSHOP/web/WFS/Footlocker-Footlocker_SE-Site/en_GB/-/SEK/",
+            "WebhookUrls": [
+                ""
+            ],
+            "CurrencySymbol": "kr"
+        },
+        "NO": {   
+            "BaseUrl": "https://www.footlocker.no/INTERSHOP/web/WFS/Footlocker-Footlocker_NO-Site/en_GB/-/NOK/",
+            "WebhookUrls": [
+                ""
+            ],
+            "CurrencySymbol": "kr"
+        }
+    }
+}
