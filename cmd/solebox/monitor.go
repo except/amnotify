@@ -233,13 +233,13 @@ func (p *sbxProduct) sendUpdate(webhookURL string) {
 
 	for _, sizeAID := range availableSizeArr {
 		sizeName := p.SizeMap[sizeAID]
-		sizeString := fmt.Sprintf("[US %v](https://www.solebox.com/index.php?fnc=changebasket&aproducts[0][aid]=%v&aproducts[0][am]=1&cl=user&lang=1)", sizeName, sizeAID)
+		sizeString := fmt.Sprintf("[US %v](https://www.solebox.com/index.php?fnc=changebasket&aproducts[0][aid]=%v&aproducts[0][am]=1&cl=basket&lang=1)", sizeName, sizeAID)
 		availableSizeStringArr = append(availableSizeStringArr, sizeString)
 	}
 
 	for _, sizeAID := range unavailableSizeArr {
 		sizeName := p.SizeMap[sizeAID]
-		sizeString := fmt.Sprintf("[~~US %v~~](https://www.solebox.com/index.php?fnc=changebasket&aproducts[0][aid]=%v&aproducts[0][am]=1&cl=user&lang=1)", sizeName, sizeAID)
+		sizeString := fmt.Sprintf("[~~US %v~~](https://www.solebox.com/index.php?fnc=changebasket&aproducts[0][aid]=%v&aproducts[0][am]=1&cl=basket&lang=1)", sizeName, sizeAID)
 		unavailableSizeStringArr = append(unavailableSizeStringArr, sizeString)
 	}
 
