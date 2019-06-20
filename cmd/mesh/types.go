@@ -25,11 +25,6 @@ type meshProductInfo struct {
 	Name, Price, ImageURL string
 }
 
-type meshProductSKU struct {
-	ItemSKU      string
-	Availability bool
-}
-
 type meshWishlist struct {
 	Content []struct {
 		Products []struct {
@@ -42,13 +37,13 @@ type meshWishlist struct {
 					Amount   string `json:"amount"`
 					Currency string `json:"currency"`
 				} `json:"price"`
-				Options map[string]meshWishlistSKU `json:"options"`
+				Options map[string]meshProductSKU `json:"options"`
 			} `json:"product"`
 		} `json:"products"`
 	} `json:"content"`
 }
 
-type meshWishlistSKU struct {
+type meshProductSKU struct {
 	SKU         string `json:"SKU"`
 	StockStatus string `json:"stockStatus"`
 }
