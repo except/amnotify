@@ -1,39 +1,6 @@
-{
-    "FP_GB": {
-        "SiteURL": "https://www.footpatrol.com",
-        "SKUArray": [
-            ""
-        ],
-        "WebhookArray": [
-            ""
-        ]
-    },
-    "FP_FR": {
-        "SiteURL": "https://www.footpatrol.fr",
-        "SKUArray": [
-            ""
-        ],
-        "WebhookArray": [
-            ""
-        ]
-    },
-    "HP_GB": {
-        "SiteURL": "https://www.thehipstore.co.uk",
-        "SKUArray": [
-            ""
-        ],
-        "WebhookArray": [
-            ""
-        ]
-    },
-    "SZ_GB": {
-        "SiteURL": "https://size.co.uk",
-        "SKUArray": [
-            ""
-        ],
-        "WebhookArray": [
-            ""
-        ]
+[
+    {
+        "SKU": "",
+        "Sites": [""]
     }
-
-}
+]

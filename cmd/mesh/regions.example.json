@@ -1,0 +1,170 @@
+{
+    "FP_GB": {
+        "SiteURL": "https://www.footpatrol.com",
+        "SKUSuffix": "_footpatrolcom",
+        "WebhookUrls": [
+            ""
+        ]
+    },
+    "FP_FR": {
+        "SiteURL": "https://www.footpatrol.fr",
+        "SKUSuffix": "_footpatrolfr",
+        "WebhookUrls": [
+            ""
+        ]
+    },
+    "HP_GB": {
+        "SiteURL": "https://www.thehipstore.co.uk",
+        "SKUSuffix": "",
+        "WebhookUrls": [
+            ""
+        ]
+    },
+    "SZ_GB": {
+        "SiteURL": "https://www.size.co.uk",
+        "SKUSuffix": "",
+        "WebhookUrls": [
+            ""
+        ]
+    },
+    "SZ_DE": {
+        "SiteURL": "https://www.sizeofficial.de",
+        "SKUSuffix": "_sizede",
+        "WebhookUrls": [
+            ""
+        ]
+    },
+    "SZ_DK": {
+        "SiteURL": "https://www.sizeofficial.dk",
+        "SKUSuffix": "_sizedk",
+        "WebhookUrls": [
+            ""
+        ]
+    },
+    "SZ_ES": {
+        "SiteURL": "hhttps://www.sizeofficial.es",
+        "SKUSuffix": "_sizees",
+        "WebhookUrls": [
+            ""
+        ]
+    },
+    "SZ_FR": {
+        "SiteURL": "https://www.sizeofficial.fr",
+        "SKUSuffix": "_sizefr",
+        "WebhookUrls": [
+            ""
+        ]
+    },
+    "SZ_IE": {
+        "SiteURL": "https://www.sizeofficial.ie",
+        "SKUSuffix": "_sizeie",
+        "WebhookUrls": [
+            ""
+        ]
+    },
+    "SZ_IT": {
+        "SiteURL": "https://www.sizeofficial.it",
+        "SKUSuffix": "_sizeit",
+        "WebhookUrls": [
+            ""
+        ]
+    },
+    "SZ_NL": {
+        "SiteURL": "https://www.sizeofficial.nl",
+        "SKUSuffix": "_sizenl",
+        "WebhookUrls": [
+            ""
+        ]
+    },
+    "SZ_SE": {
+        "SiteURL": "https://www.sizeofficial.nl",
+        "SKUSuffix": "_sizese",
+        "WebhookUrls": [
+            ""
+        ]
+    },
+    "JD_GB": {
+        "SiteURL": "https://www.jdsports.co.uk",
+        "SKUSuffix": "",
+        "WebhookUrls": [
+            ""
+        ]
+    },
+    "JD_BE": {
+        "SiteURL": "https://www.jdsports.be",
+        "SKUSuffix": "_jdsportsbe",
+        "WebhookUrls": [
+            ""
+        ]
+    },
+    "JD_DE": {
+        "SiteURL": "https://www.jdsports.de",
+        "SKUSuffix": "_jdsportsde",
+        "WebhookUrls": [
+            ""
+        ]
+    },
+    "JD_DK": {
+        "SiteURL": "https://www.jdsports.dk",
+        "SKUSuffix": "_jdsportsdk",
+        "WebhookUrls": [
+            ""
+        ]
+    },
+    "JD_ES": {
+        "SiteURL": "https://www.jdsports.es",
+        "SKUSuffix": "_jdsportses",
+        "WebhookUrls": [
+            ""
+        ]
+    },
+    "JD_FR": {
+        "SiteURL": "https://www.jdsports.fr",
+        "SKUSuffix": "_jdsportsfr",
+        "WebhookUrls": [
+            ""
+        ]
+    },
+    "JD_IE": {
+        "SiteURL": "https://www.jdsports.ie",
+        "SKUSuffix": "_jdsportsie",
+        "WebhookUrls": [
+            ""
+        ]
+    },
+    "JD_IT": {
+        "SiteURL": "https://www.jdsports.it",
+        "SKUSuffix": "_jdsportsit",
+        "WebhookUrls": [
+            ""
+        ]
+    },
+    "JD_MY": {
+        "SiteURL": "https://www.jdsports.my",
+        "SKUSuffix": "_jdsportsmy",
+        "WebhookUrls": [
+            ""
+        ]
+    },
+    "JD_NL": {
+        "SiteURL": "https://www.jdsports.nl",
+        "SKUSuffix": "_jdsportsnl",
+        "WebhookUrls": [
+            ""
+        ]
+    },
+    "JD_SE": {
+        "SiteURL": "https://www.jdsports.se",
+        "SKUSuffix": "_jdsportsse",
+        "WebhookUrls": [
+            ""
+        ]
+    },
+    "JD_AU": {
+        "SiteURL": "https://www.jd-sports.com.au",
+        "SKUSuffix": "_jdsportsau",
+        "WebhookUrls": [
+            ""
+        ]
+    }
+}
