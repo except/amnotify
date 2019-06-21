@@ -1,167 +1,311 @@
 {
     "FP_GB": {
-        "SiteURL": "https://www.footpatrol.com",
+        "SiteUrl": "https://www.footpatrol.com",
+        "Backend": false,
+        "HawkEnabled": true,
+        "StoreCode": "",
+        "APIKey": "",
+        "HawkID": "1c88f5f855",
+        "HawkSecret": "e705e8f04c662635f34962dfcac2af75",
         "SKUSuffix": "_footpatrolcom",
         "WebhookUrls": [
             ""
         ]
     },
     "FP_FR": {
-        "SiteURL": "https://www.footpatrol.fr",
+        "SiteUrl": "https://www.footpatrol.fr",
+        "Backend": false,
+        "HawkEnabled": false,
+        "StoreCode": "",
+        "APIKey": "",
+        "HawkID": "",
+        "HawkSecret": "",
         "SKUSuffix": "_footpatrolfr",
         "WebhookUrls": [
             ""
         ]
     },
     "HP_GB": {
-        "SiteURL": "https://www.thehipstore.co.uk",
+        "SiteUrl": "https://www.thehipstore.co.uk",
+        "Backend": false,
+        "HawkEnabled": true,
+        "StoreCode": "thehipstore",
+        "APIKey": "117860D26D504A5FB26B2FB64CE35FB8",
+        "HawkID": "7c480586f6",
+        "HawkSecret": "87576edd5a373b323271ad0e367ba452",
         "SKUSuffix": "",
         "WebhookUrls": [
             ""
         ]
     },
     "SZ_GB": {
-        "SiteURL": "https://www.size.co.uk",
+        "SiteUrl": "https://www.size.co.uk",
+        "Backend": false,
+        "HawkEnabled": true,
+        "StoreCode": "size",
+        "APIKey": "07B7D4BBF1F646EDBEB251594045A2D8",
+        "HawkID": "b5050ee5b3",
+        "HawkSecret": "e11952ab6b3319c5e4cb203b2ec2939e",
         "SKUSuffix": "",
         "WebhookUrls": [
             ""
         ]
     },
     "SZ_DE": {
-        "SiteURL": "https://www.sizeofficial.de",
+        "SiteUrl": "https://www.sizeofficial.de",
+        "Backend": false,
+        "HawkEnabled": false,
+        "StoreCode": "",
+        "APIKey": "",
+        "HawkID": "",
+        "HawkSecret": "",
         "SKUSuffix": "_sizede",
         "WebhookUrls": [
             ""
         ]
     },
     "SZ_DK": {
-        "SiteURL": "https://www.sizeofficial.dk",
+        "SiteUrl": "https://www.sizeofficial.dk",
+        "Backend": false,
+        "HawkEnabled": false,
+        "StoreCode": "",
+        "APIKey": "",
+        "HawkID": "",
+        "HawkSecret": "",
         "SKUSuffix": "_sizedk",
         "WebhookUrls": [
             ""
         ]
     },
     "SZ_ES": {
-        "SiteURL": "hhttps://www.sizeofficial.es",
+        "SiteUrl": "hhttps://www.sizeofficial.es",
+        "Backend": false,
+        "HawkEnabled": false,
+        "StoreCode": "",
+        "APIKey": "",
+        "HawkID": "",
+        "HawkSecret": "",
         "SKUSuffix": "_sizees",
         "WebhookUrls": [
             ""
         ]
     },
     "SZ_FR": {
-        "SiteURL": "https://www.sizeofficial.fr",
+        "SiteUrl": "https://www.sizeofficial.fr",
+        "Backend": false,
+        "HawkEnabled": false,
+        "StoreCode": "sizefr",
+        "APIKey": "",
+        "HawkID": "",
+        "HawkSecret": "",
         "SKUSuffix": "_sizefr",
         "WebhookUrls": [
             ""
         ]
     },
     "SZ_IE": {
-        "SiteURL": "https://www.sizeofficial.ie",
+        "SiteUrl": "https://www.sizeofficial.ie",
+        "Backend": false,
+        "HawkEnabled": false,
+        "StoreCode": "sizeie",
+        "APIKey": "",
+        "HawkID": "",
+        "HawkSecret": "",
         "SKUSuffix": "_sizeie",
         "WebhookUrls": [
             ""
         ]
     },
     "SZ_IT": {
-        "SiteURL": "https://www.sizeofficial.it",
+        "SiteUrl": "https://www.sizeofficial.it",
+        "Backend": false,
+        "HawkEnabled": false,
+        "StoreCode": "",
+        "APIKey": "",
+        "HawkID": "",
+        "HawkSecret": "",
         "SKUSuffix": "_sizeit",
         "WebhookUrls": [
             ""
         ]
     },
     "SZ_NL": {
-        "SiteURL": "https://www.sizeofficial.nl",
+        "SiteUrl": "https://www.sizeofficial.nl",
+        "Backend": false,
+        "HawkEnabled": false,
+        "StoreCode": "",
+        "APIKey": "",
+        "HawkID": "",
+        "HawkSecret": "",
         "SKUSuffix": "_sizenl",
         "WebhookUrls": [
             ""
         ]
     },
     "SZ_SE": {
-        "SiteURL": "https://www.sizeofficial.nl",
+        "SiteUrl": "https://www.sizeofficial.nl",
+        "Backend": false,
+        "HawkEnabled": false,
+        "StoreCode": "",
+        "APIKey": "",
+        "HawkID": "",
+        "HawkSecret": "",
         "SKUSuffix": "_sizese",
         "WebhookUrls": [
             ""
         ]
     },
     "JD_GB": {
-        "SiteURL": "https://www.jdsports.co.uk",
+        "SiteUrl": "https://www.jdsports.co.uk",
+        "Backend": false,
+        "HawkEnabled": true,
+        "StoreCode": "jdsportsuk",
+        "APIKey": "81B99BC3CE5B4889BE6C9DC6A2309BCA",
+        "HawkID": "81f03e6b68",
+        "HawkSecret": "ba18206a86610f93432214428287123f",
         "SKUSuffix": "",
         "WebhookUrls": [
             ""
         ]
     },
     "JD_BE": {
-        "SiteURL": "https://www.jdsports.be",
+        "SiteUrl": "https://www.jdsports.be",
+        "Backend": false,
+        "HawkEnabled": false,
+        "StoreCode": "jdsportsbe",
+        "APIKey": "8B6F8C80C8A640EEB26DC134B45A78B4",
+        "HawkID": "b13f47a927",
+        "HawkSecret": "9369062d2432d62a9631ef8e9c3bc3c0",
         "SKUSuffix": "_jdsportsbe",
         "WebhookUrls": [
             ""
         ]
     },
     "JD_DE": {
-        "SiteURL": "https://www.jdsports.de",
+        "SiteUrl": "https://www.jdsports.de",
+        "Backend": false,
+        "HawkEnabled": false,
+        "StoreCode": "jdsportsde",
+        "APIKey": "28F995D1B0F14B37AFBF6232ED69CBEE",
+        "HawkID": "a1007bdc43",
+        "HawkSecret": "b7ec35e38bf36cdb30697108192a28ed",
         "SKUSuffix": "_jdsportsde",
         "WebhookUrls": [
             ""
         ]
     },
     "JD_DK": {
-        "SiteURL": "https://www.jdsports.dk",
+        "SiteUrl": "https://www.jdsports.dk",
+        "Backend": false,
+        "HawkEnabled": false,
+        "StoreCode": "jdsportsdk",
+        "APIKey": "5F923029B56345A3B197468BDD33C053",
+        "HawkID": "6bd326cb9a",
+        "HawkSecret": "204d7197adb44f7e849e98083c9726c0",
         "SKUSuffix": "_jdsportsdk",
         "WebhookUrls": [
             ""
         ]
     },
     "JD_ES": {
-        "SiteURL": "https://www.jdsports.es",
+        "SiteUrl": "https://www.jdsports.es",
+        "Backend": false,
+        "HawkEnabled": false,
+        "StoreCode": "",
+        "APIKey": "",
+        "HawkID": "b26fb2c403",
+        "HawkSecret": "8d718c4c994d011912ba921197cfe108",
         "SKUSuffix": "_jdsportses",
         "WebhookUrls": [
             ""
         ]
     },
     "JD_FR": {
-        "SiteURL": "https://www.jdsports.fr",
+        "SiteUrl": "https://www.jdsports.fr",
+        "Backend": false,
+        "HawkEnabled": false,
+        "StoreCode": "",
+        "APIKey": "",
+        "HawkID": "",
+        "HawkSecret": "",
         "SKUSuffix": "_jdsportsfr",
         "WebhookUrls": [
             ""
         ]
     },
     "JD_IE": {
-        "SiteURL": "https://www.jdsports.ie",
+        "SiteUrl": "https://www.jdsports.ie",
+        "Backend": false,
+        "HawkEnabled": false,
+        "StoreCode": "",
+        "APIKey": "",
+        "HawkID": "",
+        "HawkSecret": "",
         "SKUSuffix": "_jdsportsie",
         "WebhookUrls": [
             ""
         ]
     },
     "JD_IT": {
-        "SiteURL": "https://www.jdsports.it",
+        "SiteUrl": "https://www.jdsports.it",
+        "Backend": false,
+        "HawkEnabled": false,
+        "StoreCode": "",
+        "APIKey": "",
+        "HawkID": "",
+        "HawkSecret": "",
         "SKUSuffix": "_jdsportsit",
         "WebhookUrls": [
             ""
         ]
     },
     "JD_MY": {
-        "SiteURL": "https://www.jdsports.my",
+        "SiteUrl": "https://www.jdsports.my",
+        "Backend": false,
+        "HawkEnabled": false,
+        "StoreCode": "",
+        "APIKey": "",
+        "HawkID": "",
+        "HawkSecret": "",
         "SKUSuffix": "_jdsportsmy",
         "WebhookUrls": [
             ""
         ]
     },
     "JD_NL": {
-        "SiteURL": "https://www.jdsports.nl",
+        "SiteUrl": "https://www.jdsports.nl",
+        "Backend": false,
+        "HawkEnabled": false,
+        "StoreCode": "",
+        "APIKey": "",
+        "HawkID": "",
+        "HawkSecret": "",
         "SKUSuffix": "_jdsportsnl",
         "WebhookUrls": [
             ""
         ]
     },
     "JD_SE": {
-        "SiteURL": "https://www.jdsports.se",
+        "SiteUrl": "https://www.jdsports.se",
+        "Backend": false,
+        "HawkEnabled": false,
+        "StoreCode": "",
+        "APIKey": "",
+        "HawkID": "",
+        "HawkSecret": "",
         "SKUSuffix": "_jdsportsse",
         "WebhookUrls": [
             ""
         ]
     },
     "JD_AU": {
-        "SiteURL": "https://www.jd-sports.com.au",
+        "SiteUrl": "https://www.jd-sports.com.au",
+        "Backend": false,
+        "HawkEnabled": false,
+        "StoreCode": "",
+        "APIKey": "",
+        "HawkID": "",
+        "HawkSecret": "",
         "SKUSuffix": "_jdsportsau",
         "WebhookUrls": [
             ""

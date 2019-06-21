@@ -3,8 +3,15 @@ package main
 type meshSiteConfig map[string]*meshSite
 
 type meshSite struct {
-	SiteURL   string `json:"SiteURL"`
-	SKUSuffix string `json:"SKUSuffix"`
+	SiteURL     string   `json:"SiteUrl"`
+	Backend     bool     `json:"Backend"`
+	HawkEnabled bool     `json:"HawkEnabled"`
+	StoreCode   string   `json:"StoreCode"`
+	APIKey      string   `json:"APIKey"`
+	HawkID      string   `json:"HawkID"`
+	HawkSecret  string   `json:"HawkSecret"`
+	SKUSuffix   string   `json:"SKUSuffix"`
+	WebhookUrls []string `json:"WebhookUrls"`
 }
 
 type meshConfig []meshConfigProduct
