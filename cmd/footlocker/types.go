@@ -16,9 +16,8 @@ type ftlSKU struct {
 }
 
 type ftlRegion struct {
-	BaseURL        string   `json:"BaseUrl"`
-	WebhookUrls    []string `json:"WebhookUrls"`
-	CurrencySymbol string   `json:"CurrencySymbol"`
+	BaseURL     string   `json:"BaseUrl"`
+	WebhookUrls []string `json:"WebhookUrls"`
 }
 
 type ftlContent struct {
@@ -31,6 +30,7 @@ type ftlTask struct {
 	PageRemoved bool
 
 	Region      *ftlRegion
+	RegionName  string
 	ProductInfo *ftlProdInfo
 
 	sync.Mutex
@@ -47,4 +47,32 @@ type ftlSize struct {
 	SizeValue       string    `json:"sizeValue"`
 	QuantityMessage string    `json:"quantityMessage"`
 	QuantityOptions []float64 `json:"quantityOptions"`
+}
+
+type discordWebhook struct {
+	Embeds []discordEmbed `json:"embeds"`
+}
+
+type discordEmbed struct {
+	Title     string                `json:"title"`
+	URL       string                `json:"url"`
+	Color     int                   `json:"color"`
+	Footer    discordEmbedFooter    `json:"footer"`
+	Thumbnail discordEmbedThumbnail `json:"thumbnail"`
+	Fields    []discordEmbedField   `json:"fields"`
+}
+
+type discordEmbedFooter struct {
+	IconURL string `json:"icon_url"`
+	Text    string `json:"text"`
+}
+
+type discordEmbedThumbnail struct {
+	URL string `json:"url"`
+}
+
+type discordEmbedField struct {
+	Name   string `json:"name"`
+	Value  string `json:"value"`
+	Inline bool   `json:"inline"`
 }
