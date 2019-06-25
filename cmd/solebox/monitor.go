@@ -64,6 +64,8 @@ func (p *sbxProduct) getSizes() ([]*sbxSize, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode == 200 {
+		p.PageRemoved = false
+
 		page, err := goquery.NewDocumentFromReader(resp.Body)
 
 		if err != nil {
