@@ -35,6 +35,7 @@ func init() {
 
 	if err != nil {
 		log.Printf("[ERROR] [CONFIG] %v", err.Error())
+		return
 	}
 
 	defer configFile.Close()
@@ -42,6 +43,7 @@ func init() {
 
 	if err != nil {
 		log.Printf("[ERROR] [CONFIG] %v", err.Error())
+		return
 	}
 
 	json.Unmarshal(configBytes, &config)
@@ -50,6 +52,8 @@ func init() {
 }
 
 func main() {
+	log.SetFlags(log.LstdFlags | log.Lmicroseconds)
+
 	for _, product := range config.SKUArray {
 		for _, region := range product.Regions {
 			wg.Add(1)
@@ -73,6 +77,7 @@ func createTask(productSKU, region string) *ftlTask {
 			Region:     selectedRegion,
 			RegionName: region,
 			FirstRun:   true,
+			Inventory:  make(map[string]ftlSize),
 		}
 	}
 

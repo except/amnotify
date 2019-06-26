@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+    <meta name="referrer" content="no-referrer"/>
+    <body>
+    </body>
+    <script>
+        var redirectLocation
+        var urlParams = new URLSearchParams(window.location.search)
+
+        if (!(urlParams.has("SKU") && urlParams.has("countryCode"))) {
+            window.location.href = "https://amnotify.com"
+        }
+
+        const form = document.createElement("form")
+        form.method = "POST"
+        form.style = "width:0;height:0;border:0; border:none;"
+
+        var tellUserToFuckOff = false
+
+        switch (urlParams.get("countryCode")) {
+        case "DE":
+            form.action = "https://www.footlocker.de/de/zum-warenkorb-hinzufuegen"
+            redirectLocation = "https://www.footlocker.de/INTERSHOP/web/WFS/Footlocker-Footlocker_DE-Site/de_DE/-/EUR/ViewCart-View"
+            break;
+        case "GB":
+            form.action = "https://www.footlocker.co.uk/en/addtocart"
+            redirectLocation = "https://www.footlocker.co.uk/INTERSHOP/web/WFS/Footlocker-Footlocker_GB-Site/en_GB/-/GBP/ViewCart-View"
+            break;
+        case "NL":
+            form.action = " https://www.footlocker.nl/nl/toevoegen-aan-winkelwagen?"
+            redirectLocation = "https://www.footlocker.nl/INTERSHOP/web/WFS/Footlocker-Footlocker_NL-Site/nl_NL/-/EUR/ViewCart-View"
+            break;
+        case "LU":
+            form.action = "https://www.footlocker.lu/fr/ajouter-au-panier"
+            redirectLocation = "https://www.footlocker.lu/INTERSHOP/web/WFS/Footlocker-Footlocker_LU-Site/fr_FR/-/EUR/ViewCart-View"
+            break;
+        case "BE":
+            form.action = "ttps://www.footlocker.be/fr/ajouter-au-panier"
+            redirectLocation = "https://www.footlocker.be/INTERSHOP/web/WFS/Footlocker-Footlocker_BE-Site/fr_FR/-/EUR/ViewCart-View"
+            break;
+        case "IT":
+            form.action = "https://www.footlocker.it/it/aggiungi-al-carrello"
+            redirectLocation = "https://www.footlocker.it/INTERSHOP/web/WFS/Footlocker-Footlocker_IT-Site/it_IT/-/EUR/ViewCart-View"
+            break;
+        case "ES":
+            form.action = "https://www.footlocker.es/es/anadir-al-carrito"
+            redirectLocation = "https://www.footlocker.es/INTERSHOP/web/WFS/Footlocker-Footlocker_ES-Site/es_ES/-/EUR/ViewCart-View"
+            break;
+        case "FR":
+            form.action = "https://www.footlocker.fr/fr/ajouter-au-panier"
+            redirectLocation = "https://www.footlocker.fr/INTERSHOP/web/WFS/Footlocker-Footlocker_FR-Site/fr_FR/-/EUR/ViewCart-View"
+            break;
+        case "DK":
+            form.action = "https://www.footlocker.dk/en/addtocart"
+            redirectLocation = "https://www.footlocker.dk/INTERSHOP/web/WFS/Footlocker-Footlocker_DK-Site/en_GB/-/DKK/ViewCart-View"
+            break;
+        case "SE":
+            form.action = "https://www.footlocker.se/en/addtocart"
+            redirectLocation = "https://www.footlocker.se/INTERSHOP/web/WFS/Footlocker-Footlocker_SE-Site/en_GB/-/SEK/ViewCart-View"
+            break;
+        case "NO":
+            form.action = "https://www.footlocker.no/en/addtocart"
+            redirectLocation = "https://www.footlocker.no/INTERSHOP/web/WFS/Footlocker-Footlocker_NO-Site/en_GB/-/NOK/ViewCart-View"
+            break;
+        default:
+            tellUserToFuckOff = true
+        }
+
+        if (tellUserToFuckOff) {
+           window.location.href = "https://www.amnotify.com" 
+        }
+
+        const inputs = [{
+            name: "SKU",
+            value: urlParams.get("SKU")
+        },{
+            name: "ajax",
+            value: "1"
+        }]
+
+        inputs.forEach(input => {
+            const el = document.createElement("input")
+            el.type = "hidden"
+            el.name = input.name
+            el.value = input.value
+            form.appendChild(el)
+        })
+
+        document.body.appendChild(form)
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        completeATC()
+
+        async function completeATC() {
+            form.submit()
+            await sleep(500)
+            window.location.href = redirectLocation
+        }
+    </script>
+</html>

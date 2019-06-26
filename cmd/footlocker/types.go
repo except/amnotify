@@ -1,9 +1,5 @@
 package main
 
-import (
-	"sync"
-)
-
 type ftlConfig struct {
 	SKUArray   []ftlSKU              `json:"SKUArray"`
 	ProxyArray []string              `json:"ProxyArray"`
@@ -33,7 +29,6 @@ type ftlTask struct {
 	RegionName  string
 	ProductInfo *ftlProdInfo
 
-	sync.Mutex
 	Inventory map[string]ftlSize
 }
 
