@@ -23,6 +23,7 @@ var (
 
 func init() {
 	proxyURL, _ := url.Parse("http://81.92.194.200:8800")
+
 	client.Transport = &http.Transport{
 		Proxy: http.ProxyURL(proxyURL),
 	}
@@ -61,7 +62,12 @@ func main() {
 			go func(productSKU, region string) {
 				defer wg.Done()
 
-				createTask(productSKU, region).beginMonitor()
+				task := createTask(productSKU, region)
+
+				if task != nil {
+					task.beginMonitor()
+				}
+
 			}(product.SKU, region)
 		}
 	}
@@ -81,5 +87,6 @@ func createTask(productSKU, region string) *ftlTask {
 		}
 	}
 
+	log.Printf("[WARN] Invalid Region Selected - %v - %v", productSKU, region)
 	return nil
 }

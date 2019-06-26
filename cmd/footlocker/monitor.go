@@ -21,7 +21,7 @@ func (p *ftlTask) beginMonitor() {
 
 		if err != nil {
 			log.Printf("Error %v - %v", p.SKU, err.Error())
-			time.Sleep(2 * time.Second)
+			time.Sleep(1 * time.Second)
 			continue
 
 		}
@@ -33,13 +33,13 @@ func (p *ftlTask) beginMonitor() {
 				log.Printf("[INFO] No Sizes Available - %v - %v", p.SKU, p.RegionName)
 			}
 
-			time.Sleep(2 * time.Second)
+			time.Sleep(1 * time.Second)
 			continue
 		}
 
 		p.checkUpdate(productInventory)
 
-		time.Sleep(2 * time.Second)
+		time.Sleep(1 * time.Second)
 	}
 }
 
@@ -214,20 +214,41 @@ func (p *ftlTask) notifyWebhook(webhookURL string) {
 	hookStruct := &discordWebhook{}
 
 	hookEmbed := discordEmbed{
-		Title: p.ProductInfo.Name,
-		URL:   p.ProductInfo.URL,
 		Color: 16721733,
 	}
+
+	priceField := discordEmbedField{
+		Name:   "Price",
+		Inline: true,
+	}
+
+	if p.ProductInfo != nil {
+		hookEmbed.Title = p.ProductInfo.Name
+		hookEmbed.URL = p.ProductInfo.URL
+		priceField.Value = p.ProductInfo.Price
+	} else {
+		hookEmbed.Title = p.SKU
+		hookEmbed.URL = p.Region.BaseURL
+		priceField.Value = "N/A"
+	}
+
+	if hookEmbed.Title == "" {
+		hookEmbed.Title = p.SKU
+	}
+
+	if hookEmbed.URL == "" {
+		hookEmbed.URL = p.Region.BaseURL
+	}
+
+	if priceField.Value == "" {
+		priceField.Value = "N/A"
+	}
+
+	hookEmbed.Fields = append(hookEmbed.Fields, priceField)
 
 	hookEmbed.Thumbnail = discordEmbedThumbnail{
 		URL: fmt.Sprintf("https://runnerspoint.scene7.com/is/image/rpe/%v_01?wid=512", p.SKU),
 	}
-
-	hookEmbed.Fields = append(hookEmbed.Fields, discordEmbedField{
-		Name:   "Price",
-		Value:  p.ProductInfo.Price,
-		Inline: true,
-	})
 
 	hookEmbed.Fields = append(hookEmbed.Fields, discordEmbedField{
 		Name:   "Product SKU",
@@ -266,7 +287,7 @@ func (p *ftlTask) notifyWebhook(webhookURL string) {
 			sizePrefix = "EU"
 		}
 
-		availableSizeString = append(availableSizeString, fmt.Sprintf("%v %v", sizePrefix, p.Inventory[ftlSKU].SizeValue))
+		availableSizeString = append(availableSizeString, fmt.Sprintf("[%v %v](http://amnotify.io/ftleu.html?SKU=%v&countryCode=%v)", sizePrefix, p.Inventory[ftlSKU].SizeValue, ftlSKU, p.RegionName))
 	}
 
 	if len(availableSizeString) > 0 {
