@@ -1,17 +1,32 @@
 <!DOCTYPE html>
-    <meta name="referrer" content="no-referrer"/>
+<html>
+    <head>  
+        <title>AMNotify - Footlocker ATC</title>
+        <meta name="referrer" content="no-referrer"/>
+    </head>
+    
     <body>
+        <!-- INSERT HERE - REMOVE THIS LINE -->
     </body>
     <script>
         var redirectLocation
         var urlParams = new URLSearchParams(window.location.search)
 
-        if (!(urlParams.has("SKU") && urlParams.has("countryCode"))) {
+        if (!(urlParams.has("SKU") && urlParams.has("countryCode")) || window.location.search === "") {
             window.location.href = "https://amnotify.com"
         }
 
+        const iframe = document.createElement("iframe")
+        iframe.width = 0
+        iframe.height = 0
+        iframe.name = "ftlPostFrame"
+        iframe.style = "width:0;height:0;border:0; border:none;"
+
+        document.body.appendChild(iframe)
+
         const form = document.createElement("form")
         form.method = "POST"
+        form.target = "ftlPostFrame"
         form.style = "width:0;height:0;border:0; border:none;"
 
         var tellUserToFuckOff = false
@@ -65,24 +80,20 @@
             tellUserToFuckOff = true
         }
 
-        if (tellUserToFuckOff) {
-           window.location.href = "https://www.amnotify.com" 
-        }
-
-        const inputs = [{
+        const formInputs = [{
             name: "SKU",
             value: urlParams.get("SKU")
         },{
-            name: "ajax",
-            value: "1"
+            name: "Ajax",
+            value: "true"
         }]
 
-        inputs.forEach(input => {
-            const el = document.createElement("input")
-            el.type = "hidden"
-            el.name = input.name
-            el.value = input.value
-            form.appendChild(el)
+        formInputs.forEach(formInput => {
+            const formEl = document.createElement("input")
+            formEl.type = "hidden"
+            formEl.name = formInput.name
+            formEl.value = formInput.value
+            form.appendChild(formEl)
         })
 
         document.body.appendChild(form)
@@ -91,12 +102,16 @@
             return new Promise(resolve => setTimeout(resolve, ms));
         }
 
-        completeATC()
-
         async function completeATC() {
-            form.submit()
-            await sleep(500)
-            window.location.href = redirectLocation
+            if (!tellUserToFuckOff) {
+                form.submit()
+                await sleep(750)
+                window.location.href = redirectLocation
+            } else {
+                window.location.href = "https://amnotify.com"
+            }
         }
+
+        completeATC()
     </script>
 </html>
