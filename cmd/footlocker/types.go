@@ -1,5 +1,9 @@
 package main
 
+import (
+	"net/http"
+)
+
 type ftlConfig struct {
 	SKUArray   []ftlSKU              `json:"SKUArray"`
 	ProxyArray []string              `json:"ProxyArray"`
@@ -29,6 +33,7 @@ type ftlTask struct {
 	RegionName  string
 	ProductInfo *ftlProdInfo
 
+	Client    *http.Client
 	Inventory map[string]ftlSize
 }
 

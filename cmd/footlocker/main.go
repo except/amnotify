@@ -5,9 +5,9 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"net/url"
 	"os"
 	"sync"
+	"time"
 )
 
 var (
@@ -15,23 +15,11 @@ var (
 	config ftlConfig
 
 	client = &http.Client{
-		CheckRedirect: func(req *http.Request, via []*http.Request) error {
-			return http.ErrUseLastResponse
-		},
+		Timeout: 15 * time.Second,
 	}
 )
 
 func init() {
-	proxyURL, _ := url.Parse("http://81.92.194.200:8800")
-
-	client.Transport = &http.Transport{
-		Proxy: http.ProxyURL(proxyURL),
-	}
-
-	// Update
-	// Update
-	// Update
-
 	configFile, err := os.Open("config.json")
 
 	if err != nil {
@@ -83,7 +71,13 @@ func createTask(productSKU, region string) *ftlTask {
 			Region:     selectedRegion,
 			RegionName: region,
 			FirstRun:   true,
-			Inventory:  make(map[string]ftlSize),
+			Client: &http.Client{
+				Timeout: 15 * time.Second,
+				CheckRedirect: func(req *http.Request, via []*http.Request) error {
+					return http.ErrUseLastResponse
+				},
+			},
+			Inventory: make(map[string]ftlSize),
 		}
 	}
 

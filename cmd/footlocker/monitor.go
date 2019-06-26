@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
+	"net/url"
 	"sort"
 	"strings"
 	"time"
@@ -16,12 +18,14 @@ import (
 )
 
 func (p *ftlTask) beginMonitor() {
+	p.setProxy()
 	for {
 		productInventory, err := p.getInventory()
 
 		if err != nil {
 			log.Printf("Error %v - %v", p.SKU, err.Error())
-			time.Sleep(1 * time.Second)
+			p.setProxy()
+			time.Sleep(1500 * time.Millisecond)
 			continue
 
 		}
@@ -33,13 +37,35 @@ func (p *ftlTask) beginMonitor() {
 				log.Printf("[INFO] No Sizes Available - %v - %v", p.SKU, p.RegionName)
 			}
 
-			time.Sleep(1 * time.Second)
+			time.Sleep(750 * time.Millisecond)
 			continue
 		}
 
 		p.checkUpdate(productInventory)
 
-		time.Sleep(1 * time.Second)
+		time.Sleep(750 * time.Millisecond)
+	}
+}
+
+func (p *ftlTask) setProxy() {
+	if len(config.ProxyArray) > 0 {
+		proxy := config.ProxyArray[rand.Intn(len(config.ProxyArray))]
+
+		proxyURL, err := url.Parse(proxy)
+
+		if err != nil {
+			log.Printf("Error %v - %v", p.SKU, err.Error())
+			log.Printf("[WARN] Running Proxyless - %v - %v", p.SKU, p.RegionName)
+			return
+		}
+
+		p.Client.Transport = &http.Transport{
+			Proxy: http.ProxyURL(proxyURL),
+		}
+
+		log.Printf("[INFO] Running Proxy (%v) - %v - %v", proxyURL.String(), p.SKU, p.RegionName)
+	} else {
+		log.Printf("[WARN] Running Proxyless - %v - %v", p.SKU, p.RegionName)
 	}
 }
 
@@ -66,7 +92,7 @@ func (p *ftlTask) getInventory() (map[string]ftlSize, error) {
 		}
 	}
 
-	resp, err := client.Do(req)
+	resp, err := p.Client.Do(req)
 
 	if err != nil {
 		return nil, err
@@ -110,7 +136,7 @@ func (p *ftlTask) getInventory() (map[string]ftlSize, error) {
 		p.PageRemoved = true
 	}
 
-	return nil, nil
+	return nil, fmt.Errorf("[WARN] Invalid Status Code (Product Inventory) - %v - %v", resp.StatusCode, p.SKU)
 }
 
 func (p *ftlTask) pullProdInfo() (*ftlProdInfo, error) {
@@ -127,7 +153,7 @@ func (p *ftlTask) pullProdInfo() (*ftlProdInfo, error) {
 		return nil, err
 	}
 
-	resp, err := client.Do(req)
+	resp, err := p.Client.Do(req)
 
 	if err != nil {
 		return nil, err
@@ -262,18 +288,14 @@ func (p *ftlTask) notifyWebhook(webhookURL string) {
 	}
 
 	var availableSKUs []string
-	// var unavailableSKUs []string
 
 	for ftlSizeSKU, ftlSKUStatus := range p.Inventory {
 		if ftlSKUStatus.InventoryLevel != "RED" {
 			availableSKUs = append(availableSKUs, ftlSizeSKU)
-		} else {
-			// unavailableSKUs = append(unavailableSKUs, ftlSizeSKU)
 		}
 	}
 
 	sort.Strings(availableSKUs)
-	// sort.Strings(unavailableSKUs)
 
 	var availableSizeString []string
 
