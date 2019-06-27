@@ -83,15 +83,6 @@ func (p *ftlTask) getInventory() (map[string]ftlSize, error) {
 		return nil, err
 	}
 
-	if p.ProductInfo == nil {
-		productInfo, err := p.pullProdInfo()
-		if err != nil {
-			log.Println(err.Error())
-		} else {
-			p.ProductInfo = productInfo
-		}
-	}
-
 	resp, err := p.Client.Do(req)
 
 	if err != nil {
@@ -101,6 +92,16 @@ func (p *ftlTask) getInventory() (map[string]ftlSize, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode == 200 {
+
+		if p.ProductInfo == nil {
+			productInfo, err := p.pullProdInfo()
+			if err != nil {
+				log.Println(err.Error())
+			} else {
+				p.ProductInfo = productInfo
+			}
+		}
+
 		p.PageRemoved = false
 
 		var content ftlContent
@@ -134,6 +135,7 @@ func (p *ftlTask) getInventory() (map[string]ftlSize, error) {
 		}
 
 		p.PageRemoved = true
+		return nil, nil
 	}
 
 	return nil, fmt.Errorf("[WARN] Invalid Status Code (Product Inventory) - %v - %v", resp.StatusCode, p.SKU)
