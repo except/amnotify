@@ -1,11 +1,12 @@
 package main
 
+import "net/http"
+
 type meshSiteConfig map[string]*meshSite
 
 type meshSite struct {
 	SiteURL     string   `json:"SiteUrl"`
-	Backend     bool     `json:"Backend"`
-	HawkEnabled bool     `json:"HawkEnabled"`
+	UserAgent   string   `json:"UserAgent"`
 	StoreCode   string   `json:"StoreCode"`
 	APIKey      string   `json:"APIKey"`
 	HawkID      string   `json:"HawkID"`
@@ -21,9 +22,18 @@ type meshConfigProduct struct {
 	Sites []string `json:"Sites"`
 }
 
-type meshTask struct {
+type meshFrontendTask struct {
 	SKU           string
 	Site          *meshSite
+	Client        *http.Client
+	ProductInfo   *meshProductInfo
+	ProductSKUMap map[string]*meshProductSKU
+}
+
+type meshBackendTask struct {
+	SKU           string
+	Site          *meshSite
+	Client        *http.Client
 	ProductInfo   *meshProductInfo
 	ProductSKUMap map[string]*meshProductSKU
 }
@@ -32,7 +42,7 @@ type meshProductInfo struct {
 	Name, Price, ImageURL string
 }
 
-type meshWishlist struct {
+type meshFrontendWishlist struct {
 	Content []struct {
 		Products []struct {
 			Product struct {
