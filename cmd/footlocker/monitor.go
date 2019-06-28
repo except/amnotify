@@ -311,7 +311,7 @@ func (p *ftlTask) notifyWebhook(webhookURL string) {
 			sizePrefix = "EU"
 		}
 
-		availableSizeString = append(availableSizeString, fmt.Sprintf("[%v %v](http://amnotify.io/ftleu.html?SKU=%v&countryCode=%v)", sizePrefix, p.Inventory[ftlSKU].SizeValue, ftlSKU, p.RegionName))
+		availableSizeString = append(availableSizeString, fmt.Sprintf("[%v %v](http://amnotify.io/ftl.html?SKU=%v&region=%v)", sizePrefix, p.Inventory[ftlSKU].SizeValue, ftlSKU, p.RegionName))
 	}
 
 	if len(availableSizeString) > 0 {
