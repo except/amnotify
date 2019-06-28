@@ -1,12 +1,11 @@
 {
-    "FP_GB": {
+    "FP_UK": {
         "SiteUrl": "https://www.footpatrol.com",
-        "Backend": false,
-        "HawkEnabled": true,
-        "StoreCode": "",
-        "APIKey": "",
-        "HawkID": "1c88f5f855",
-        "HawkSecret": "e705e8f04c662635f34962dfcac2af75",
+        "UserAgent": "footpatrolgb/6.3.2.1446 (iphone-app; iOS 12.3.1)",
+        "StoreCode": "footpatrolgb",
+        "APIKey": "52F096E285134DF2A9E1AFAF979BB415",
+        "HawkID": "253ae55594",
+        "HawkSecret": "33367a7dc65731b695e0882f12d5f707",
         "SKUSuffix": "_footpatrolcom",
         "WebhookUrls": [
             ""
@@ -14,38 +13,35 @@
     },
     "FP_FR": {
         "SiteUrl": "https://www.footpatrol.fr",
-        "Backend": false,
-        "HawkEnabled": false,
-        "StoreCode": "",
-        "APIKey": "",
-        "HawkID": "",
-        "HawkSecret": "",
+        "UserAgent": "footpatrolfr/6.3.2.1446 (iphone-app; iOS 12.3.1)",
+        "StoreCode": "footpatrolfr",
+        "APIKey": "536AE78F060D458F8342241C6A2A7190",
+        "HawkID": "9100705ee0",
+        "HawkSecret": "b6b631e9c6866ad0fb654e29bcd22b7c",
         "SKUSuffix": "_footpatrolfr",
         "WebhookUrls": [
             ""
         ]
     },
-    "HP_GB": {
+    "HP_UK": {
         "SiteUrl": "https://www.thehipstore.co.uk",
-        "Backend": false,
-        "HawkEnabled": true,
+        "UserAgent": "thehipstore/6.2.0.1348 (iphone-app; iOS 12.3.1)",
         "StoreCode": "thehipstore",
-        "APIKey": "117860D26D504A5FB26B2FB64CE35FB8",
-        "HawkID": "7c480586f6",
-        "HawkSecret": "87576edd5a373b323271ad0e367ba452",
+        "APIKey": "244343803EAA4F10AE31BEEB10ECF5B8",
+        "HawkID": "4d4f739014",
+        "HawkSecret": "da2adfc4bf0d6be8986c038f8f2fffd5",
         "SKUSuffix": "",
         "WebhookUrls": [
             ""
         ]
     },
-    "SZ_GB": {
+    "SZ_UK": {
         "SiteUrl": "https://www.size.co.uk",
-        "Backend": false,
-        "HawkEnabled": true,
+        "UserAgent": "size/6.3.2.1443 (iphone-app; iOS 12.3.1)",
         "StoreCode": "size",
-        "APIKey": "07B7D4BBF1F646EDBEB251594045A2D8",
-        "HawkID": "b5050ee5b3",
-        "HawkSecret": "e11952ab6b3319c5e4cb203b2ec2939e",
+        "APIKey": "9039BF1C29724461881ACD80232F5313",
+        "HawkID": "fbc28a16ec",
+        "HawkSecret": "d7c7872a58138c995430dd957b18c85b",
         "SKUSuffix": "",
         "WebhookUrls": [
             ""
@@ -53,12 +49,11 @@
     },
     "SZ_DE": {
         "SiteUrl": "https://www.sizeofficial.de",
-        "Backend": false,
-        "HawkEnabled": false,
-        "StoreCode": "",
-        "APIKey": "",
-        "HawkID": "",
-        "HawkSecret": "",
+        "UserAgent": "sizede/6.3.2.1443 (iphone-app; iOS 12.3.1)",
+        "StoreCode": "sizede",
+        "APIKey": "B9AB7B6B5CD74497A4C2348F5F5E89F7",
+        "HawkID": "9242ac82fe",
+        "HawkSecret": "1c2962f6f2e346c0165e43726176fc7b",
         "SKUSuffix": "_sizede",
         "WebhookUrls": [
             ""
@@ -66,12 +61,11 @@
     },
     "SZ_DK": {
         "SiteUrl": "https://www.sizeofficial.dk",
-        "Backend": false,
-        "HawkEnabled": false,
-        "StoreCode": "",
-        "APIKey": "",
-        "HawkID": "",
-        "HawkSecret": "",
+        "UserAgent": "sizedk/6.3.2.1443 (iphone-app; iOS 12.3.1)",
+        "StoreCode": "sizedk",
+        "APIKey": "4E728C6150EE4396A8BACB0DD627DA2F",
+        "HawkID": "6af2364998",
+        "HawkSecret": "6f81172915d84691817dd22040f0b4f9",
         "SKUSuffix": "_sizedk",
         "WebhookUrls": [
             ""
@@ -79,12 +73,11 @@
     },
     "SZ_ES": {
         "SiteUrl": "hhttps://www.sizeofficial.es",
-        "Backend": false,
-        "HawkEnabled": false,
-        "StoreCode": "",
-        "APIKey": "",
-        "HawkID": "",
-        "HawkSecret": "",
+        "UserAgent": "sizees/6.3.2.1443 (iphone-app; iOS 12.3.1)",
+        "StoreCode": "sizes",
+        "APIKey": "907108D8F6754F588927ED81B37D2E05",
+        "HawkID": "b1a7868a8c",
+        "HawkSecret": "5679a7c7f8cb13d58253625a81bca52b",
         "SKUSuffix": "_sizees",
         "WebhookUrls": [
             ""
@@ -92,12 +85,11 @@
     },
     "SZ_FR": {
         "SiteUrl": "https://www.sizeofficial.fr",
-        "Backend": false,
-        "HawkEnabled": false,
+        "UserAgent": "sizefr/6.3.2.1443 (iphone-app; iOS 12.3.1)",
         "StoreCode": "sizefr",
-        "APIKey": "",
-        "HawkID": "",
-        "HawkSecret": "",
+        "APIKey": "59DCF6F765D346619E3409F1F1FE7D10",
+        "HawkID": "2a54a4bd66",
+        "HawkSecret": "b64d50a93b0c907c109b29fa9b3ca5a2",
         "SKUSuffix": "_sizefr",
         "WebhookUrls": [
             ""
@@ -105,12 +97,11 @@
     },
     "SZ_IE": {
         "SiteUrl": "https://www.sizeofficial.ie",
-        "Backend": false,
-        "HawkEnabled": false,
+        "UserAgent": "sizeie/6.3.2.1443 (iphone-app; iOS 12.3.1)",
         "StoreCode": "sizeie",
-        "APIKey": "",
-        "HawkID": "",
-        "HawkSecret": "",
+        "APIKey": "4422119FE17E4F5B8E775B32673DDB64",
+        "HawkID": "a3c0389e3d",
+        "HawkSecret": "2df03a2387ea458a25df9b609b09a972",
         "SKUSuffix": "_sizeie",
         "WebhookUrls": [
             ""
@@ -118,12 +109,11 @@
     },
     "SZ_IT": {
         "SiteUrl": "https://www.sizeofficial.it",
-        "Backend": false,
-        "HawkEnabled": false,
-        "StoreCode": "",
-        "APIKey": "",
-        "HawkID": "",
-        "HawkSecret": "",
+        "UserAgent": "sizeit/6.3.2.1443 (iphone-app; iOS 12.3.1)",
+        "StoreCode": "sizeit",
+        "APIKey": "D0C9A901F06A4C7AA00FAD92B0783C64",
+        "HawkID": "138d698519",
+        "HawkSecret": "9acd9eecc04be281930c8b16f143e4b0",
         "SKUSuffix": "_sizeit",
         "WebhookUrls": [
             ""
@@ -131,12 +121,11 @@
     },
     "SZ_NL": {
         "SiteUrl": "https://www.sizeofficial.nl",
-        "Backend": false,
-        "HawkEnabled": false,
-        "StoreCode": "",
-        "APIKey": "",
-        "HawkID": "",
-        "HawkSecret": "",
+        "UserAgent": "sizenl/6.3.2.1443 (iphone-app; iOS 12.3.1)",
+        "StoreCode": "sizenl",
+        "APIKey": "509EF36F9882470089AACAC99135B9CB",
+        "HawkID": "42d159adbc",
+        "HawkSecret": "fa796f80ae3a9790b1796e491fa19ced",
         "SKUSuffix": "_sizenl",
         "WebhookUrls": [
             ""
@@ -144,25 +133,23 @@
     },
     "SZ_SE": {
         "SiteUrl": "https://www.sizeofficial.nl",
-        "Backend": false,
-        "HawkEnabled": false,
-        "StoreCode": "",
-        "APIKey": "",
-        "HawkID": "",
-        "HawkSecret": "",
+        "UserAgent": "sizese/6.3.2.1443 (iphone-app; iOS 12.3.1)",
+        "StoreCode": "sizese",
+        "APIKey": "A99C7C5147414D58BFEBDC58D2DF9A95",
+        "HawkID": "782bdb38d8",
+        "HawkSecret": "fa7827cc513e9fe843be12124d013b25",
         "SKUSuffix": "_sizese",
         "WebhookUrls": [
             ""
         ]
     },
-    "JD_GB": {
+    "JD_UK": {
         "SiteUrl": "https://www.jdsports.co.uk",
-        "Backend": false,
-        "HawkEnabled": true,
+        "UserAgent": "jdsportsuk/6.3.5.1503 (iphone-app; iOS 12.3.1)",
         "StoreCode": "jdsportsuk",
-        "APIKey": "81B99BC3CE5B4889BE6C9DC6A2309BCA",
-        "HawkID": "81f03e6b68",
-        "HawkSecret": "ba18206a86610f93432214428287123f",
+        "APIKey": "4CE1177BB983470AB15E703EC95E5285",
+        "HawkID": "d1bdff50c5",
+        "HawkSecret": "3442497330233aecfe132ddfbbd4d46d",
         "SKUSuffix": "",
         "WebhookUrls": [
             ""
@@ -170,12 +157,11 @@
     },
     "JD_BE": {
         "SiteUrl": "https://www.jdsports.be",
-        "Backend": false,
-        "HawkEnabled": false,
+        "UserAgent": "jdsportsbe/6.3.5.1503 (iphone-app; iOS 12.3.1)",
         "StoreCode": "jdsportsbe",
-        "APIKey": "8B6F8C80C8A640EEB26DC134B45A78B4",
-        "HawkID": "b13f47a927",
-        "HawkSecret": "9369062d2432d62a9631ef8e9c3bc3c0",
+        "APIKey": "61100D5FA36F4F248D5DE6D546D47921",
+        "HawkID": "c4fb0734be",
+        "HawkSecret": "ef9a27be3268cdbc3240ae643b32a4fa",
         "SKUSuffix": "_jdsportsbe",
         "WebhookUrls": [
             ""
@@ -183,12 +169,11 @@
     },
     "JD_DE": {
         "SiteUrl": "https://www.jdsports.de",
-        "Backend": false,
-        "HawkEnabled": false,
+        "UserAgent": "jdsportsde/6.3.5.1503 (iphone-app; iOS 12.3.1)",
         "StoreCode": "jdsportsde",
-        "APIKey": "28F995D1B0F14B37AFBF6232ED69CBEE",
-        "HawkID": "a1007bdc43",
-        "HawkSecret": "b7ec35e38bf36cdb30697108192a28ed",
+        "APIKey": "195F25A2910341CBA49535BC5941F445",
+        "HawkID": "3d44230df4",
+        "HawkSecret": "f266ed9166db7af4351fa88841b8c300",
         "SKUSuffix": "_jdsportsde",
         "WebhookUrls": [
             ""
@@ -196,12 +181,11 @@
     },
     "JD_DK": {
         "SiteUrl": "https://www.jdsports.dk",
-        "Backend": false,
-        "HawkEnabled": false,
+        "UserAgent": "jdsportsdk/6.3.5.1503 (iphone-app; iOS 12.3.1)",
         "StoreCode": "jdsportsdk",
-        "APIKey": "5F923029B56345A3B197468BDD33C053",
-        "HawkID": "6bd326cb9a",
-        "HawkSecret": "204d7197adb44f7e849e98083c9726c0",
+        "APIKey": "00B2CE710BD64AC2AD7A34FEB2A7B296",
+        "HawkID": "d094b9a365",
+        "HawkSecret": "7144518ade2e82ca6385561dcc02b383",
         "SKUSuffix": "_jdsportsdk",
         "WebhookUrls": [
             ""
@@ -209,12 +193,11 @@
     },
     "JD_ES": {
         "SiteUrl": "https://www.jdsports.es",
-        "Backend": false,
-        "HawkEnabled": false,
-        "StoreCode": "",
-        "APIKey": "",
-        "HawkID": "b26fb2c403",
-        "HawkSecret": "8d718c4c994d011912ba921197cfe108",
+        "UserAgent": "jdsportses/6.3.5.1503 (iphone-app; iOS 12.3.1)",
+        "StoreCode": "jdsportses",
+        "APIKey": "EB396335754A48D795BB903B49E3AD91",
+        "HawkID": "a15e99c07a",
+        "HawkSecret": "364e1006ccf7959fc33ce5eef9486bbe",
         "SKUSuffix": "_jdsportses",
         "WebhookUrls": [
             ""
@@ -222,12 +205,11 @@
     },
     "JD_FR": {
         "SiteUrl": "https://www.jdsports.fr",
-        "Backend": false,
-        "HawkEnabled": false,
-        "StoreCode": "",
-        "APIKey": "",
-        "HawkID": "",
-        "HawkSecret": "",
+        "UserAgent": "jdsportsfr/6.3.5.1503 (iphone-app; iOS 12.3.1)",
+        "StoreCode": "jdsportsfr",
+        "APIKey": "B3B51B56ADC34016A6FEF7F8C337B836",
+        "HawkID": "f2188a5b06",
+        "HawkSecret": "8bb6bd51c83f2ec9821e1bda5c77b25b",
         "SKUSuffix": "_jdsportsfr",
         "WebhookUrls": [
             ""
@@ -235,12 +217,11 @@
     },
     "JD_IE": {
         "SiteUrl": "https://www.jdsports.ie",
-        "Backend": false,
-        "HawkEnabled": false,
-        "StoreCode": "",
-        "APIKey": "",
-        "HawkID": "",
-        "HawkSecret": "",
+        "UserAgent": "jdsportsie/6.3.5.1503 (iphone-app; iOS 12.3.1)",
+        "StoreCode": "jdsportsie",
+        "APIKey": "451FE27E0BD544C4B07C395CD5888547",
+        "HawkID": "d3cbd87f10",
+        "HawkSecret": "3c279838fd48cf45a397898344eedad8",
         "SKUSuffix": "_jdsportsie",
         "WebhookUrls": [
             ""
@@ -248,12 +229,11 @@
     },
     "JD_IT": {
         "SiteUrl": "https://www.jdsports.it",
-        "Backend": false,
-        "HawkEnabled": false,
-        "StoreCode": "",
-        "APIKey": "",
-        "HawkID": "",
-        "HawkSecret": "",
+        "UserAgent": "jdsportsit/6.3.5.1503 (iphone-app; iOS 12.3.1)",
+        "StoreCode": "jdsportsit",
+        "APIKey": "7B6B83F76BAA41DDB90D4147FB3D3C63",
+        "HawkID": "3dc77f7e7f",
+        "HawkSecret": "089587c2316656881bbf17661bbf0d33",
         "SKUSuffix": "_jdsportsit",
         "WebhookUrls": [
             ""
@@ -261,12 +241,11 @@
     },
     "JD_MY": {
         "SiteUrl": "https://www.jdsports.my",
-        "Backend": false,
-        "HawkEnabled": false,
-        "StoreCode": "",
-        "APIKey": "",
-        "HawkID": "",
-        "HawkSecret": "",
+        "UserAgent": "jdsportsmyf/6.3.5.1503 (iphone-app; iOS 12.3.1)",
+        "StoreCode": "jdsportsmyf",
+        "APIKey": "031F193F1FF7401E96D29BA8072F7251",
+        "HawkID": "560ce0f179",
+        "HawkSecret": "293dcaa194ee71b0ca9e482c2d527fcf",
         "SKUSuffix": "_jdsportsmy",
         "WebhookUrls": [
             ""
@@ -274,12 +253,11 @@
     },
     "JD_NL": {
         "SiteUrl": "https://www.jdsports.nl",
-        "Backend": false,
-        "HawkEnabled": false,
-        "StoreCode": "",
-        "APIKey": "",
-        "HawkID": "",
-        "HawkSecret": "",
+        "UserAgent": "jdsportsnl/6.3.5.1503 (iphone-app; iOS 12.3.1)",
+        "StoreCode": "jdsportsnl",
+        "APIKey": "9D93C082EA864FF5884FD4763B856C6D",
+        "HawkID": "6805a9f237",
+        "HawkSecret": "60f38ccd64b72be47eef4638edb489ae",
         "SKUSuffix": "_jdsportsnl",
         "WebhookUrls": [
             ""
@@ -287,12 +265,11 @@
     },
     "JD_SE": {
         "SiteUrl": "https://www.jdsports.se",
-        "Backend": false,
-        "HawkEnabled": false,
-        "StoreCode": "",
-        "APIKey": "",
-        "HawkID": "",
-        "HawkSecret": "",
+        "UserAgent": "jdsportsse/6.3.5.1503 (iphone-app; iOS 12.3.1)",
+        "StoreCode": "jdsportsse",
+        "APIKey": "69A3F58BA52C4DB88CB5585707A3C0F4",
+        "HawkID": "9ea5ecdfaa",
+        "HawkSecret": "80a73c56e06ef76337c6efaf94460b78",
         "SKUSuffix": "_jdsportsse",
         "WebhookUrls": [
             ""
@@ -300,12 +277,11 @@
     },
     "JD_AU": {
         "SiteUrl": "https://www.jd-sports.com.au",
-        "Backend": false,
-        "HawkEnabled": false,
-        "StoreCode": "",
-        "APIKey": "",
-        "HawkID": "",
-        "HawkSecret": "",
+        "UserAgent": "jdsportsau/6.3.5.1503 (iphone-app; iOS 12.3.1)",
+        "StoreCode": "jdsportsau",
+        "APIKey": "1753F69D6B4F48F9956DEE1002A83491",
+        "HawkID": "60122c4543",
+        "HawkSecret": "066268d08e45b34290f553f9f4e56906",
         "SKUSuffix": "_jdsportsau",
         "WebhookUrls": [
             ""
