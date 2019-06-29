@@ -34,7 +34,7 @@ func (p *sbxProduct) launchMonitor() {
 			p.checkUpdate(sizes)
 		} else {
 			if p.PageRemoved {
-				log.Printf("[INFO] No Stock Update (Page Removed) - %v", p.URL)
+				// log.Printf("[INFO] No Stock Update (Page Removed) - %v", p.URL)
 			} else {
 				log.Printf("[INFO] No Stock Update (No Sizes) - %v", p.ProductInfo.ProductName)
 			}
@@ -71,12 +71,8 @@ func (p *sbxProduct) getSizes() ([]*sbxSize, error) {
 
 	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%v?%v=%v", productURL, uniuri.NewLen(8), uniuri.NewLen(8)), nil)
 
-	req.Header.Set("Pragma", "no-cache")
-	req.Header.Set("Cache-Control", "no-cache")
-	req.Header.Set("Upgrade-Insecure-Requests", "1")
+	req.Header.Set(uniuri.NewLen(32), uniuri.NewLen(32))
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36")
-	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3")
-	req.Header.Set("Accept-Language", "en-GB,en-US;q=0.9,en;q=0.8")
 
 	if err != nil {
 		return nil, err
