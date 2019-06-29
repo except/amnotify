@@ -5,9 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"math/rand"
 	"sort"
 	"time"
+
+	"github.com/dchest/uniuri"
 
 	"net/http"
 	"strings"
@@ -41,9 +42,8 @@ func (p *sbxProduct) launchMonitor() {
 func (p *sbxProduct) getSizes() ([]*sbxSize, error) {
 	productURL := strings.Replace(p.URL, "www.solebox.com", "cdn.solebox.com", 1)
 
-	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%v?cl=%v", productURL, rand.Float64()), nil)
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%v?%v=%v", productURL, uniuri.NewLen(8), uniuri.NewLen(8)), nil)
 
-	req.Header.Set("Authority", "cdn.solebox.com")
 	req.Header.Set("Pragma", "no-cache")
 	req.Header.Set("Cache-Control", "no-cache")
 	req.Header.Set("Upgrade-Insecure-Requests", "1")
