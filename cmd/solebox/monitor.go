@@ -34,9 +34,9 @@ func (p *sbxProduct) launchMonitor() {
 			p.checkUpdate(sizes)
 		} else {
 			if p.PageRemoved {
-				// log.Printf("[INFO] No Stock Update (Page Removed) - %v", p.URL)
+				log.Printf("[INFO] No Stock Update (Page Removed) - %v", p.URL)
 			} else {
-				// log.Printf("[INFO] No Stock Update (No Sizes) - %v", p.ProductInfo.ProductName)
+				log.Printf("[INFO] No Stock Update (No Sizes) - %v", p.ProductInfo.ProductName)
 			}
 		}
 
@@ -276,7 +276,7 @@ func (p *sbxProduct) sendUpdate(webhookURL string) {
 		})
 	}
 
-	if len(unavailableSizeStringArr) > 0 {
+	if len(unavailableSizeStringArr) > 0 && len(strings.Join(unavailableSizeStringArr, "\n")) < 1024 {
 		hookEmbed.Fields = append(hookEmbed.Fields, discordEmbedField{
 			Name:   "Unavailable Sizes",
 			Value:  strings.Join(unavailableSizeStringArr, "\n"),
