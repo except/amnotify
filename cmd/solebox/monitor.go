@@ -5,23 +5,28 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math/rand"
 	"sort"
 	"time"
 
 	"github.com/dchest/uniuri"
 
 	"net/http"
+	"net/url"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
 )
 
 func (p *sbxProduct) launchMonitor() {
+	p.setProxy()
+
 	for {
 		sizes, err := p.getSizes()
 
 		if err != nil {
 			log.Printf("[ERROR] %v - %v", p.URL, err.Error())
+			p.setProxy()
 			continue
 		}
 
@@ -36,6 +41,28 @@ func (p *sbxProduct) launchMonitor() {
 		}
 
 		time.Sleep(50 * time.Millisecond)
+	}
+}
+
+func (p *sbxProduct) setProxy() {
+	if len(config.ProxyArray) > 0 {
+		proxy := config.ProxyArray[rand.Intn(len(config.ProxyArray))]
+
+		proxyURL, err := url.Parse(proxy)
+
+		if err != nil {
+			log.Printf("Error %v - %v", p.URL, err.Error())
+			log.Printf("[WARN] Running Proxyless - %v", p.URL)
+			return
+		}
+
+		p.Client.Transport = &http.Transport{
+			Proxy: http.ProxyURL(proxyURL),
+		}
+
+		log.Printf("[INFO] Running Proxy (%v) - %v", proxyURL.String(), p.URL)
+	} else {
+		log.Printf("[WARN] Running Proxyless - %v", p.URL)
 	}
 }
 
@@ -120,7 +147,7 @@ func (p *sbxProduct) getSizes() ([]*sbxSize, error) {
 		return nil, nil
 	}
 
-	return nil, nil
+	return nil, fmt.Errorf("Invalid Status Code - %v", resp.StatusCode)
 }
 
 func (p *sbxProduct) setAvailable(size *sbxSize) {

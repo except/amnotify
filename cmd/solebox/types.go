@@ -1,16 +1,19 @@
 package main
 
 import (
+	"net/http"
 	"sync"
 )
 
 type sbxConfig struct {
 	WebhookUrls []string `json:"webhookUrls"`
 	ProductUrls []string `json:"productUrls"`
+	ProxyArray  []string `json:"ProxyArray"`
 }
 
 type sbxProduct struct {
 	URL         string
+	Client      *http.Client
 	ProductInfo *sbxProductInfo
 	FirstRun    bool
 	PageRemoved bool

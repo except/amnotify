@@ -38,7 +38,7 @@ func init() {
 
 	json.Unmarshal(configBytes, &config)
 
-	log.Printf("[INFO] Loaded %v Webhooks & %v Products", len(config.WebhookUrls), len(config.ProductUrls))
+	log.Printf("[INFO] Loaded %v Webhooks - %v Products - %v Proxies", len(config.WebhookUrls), len(config.ProductUrls), len(config.ProxyArray))
 
 }
 
@@ -65,5 +65,11 @@ func createProduct(prodURL string) *sbxProduct {
 		SizeAvailability: make(map[string]bool),
 		SizeMap:          make(map[string]string),
 		FirstRun:         true,
+		Client: &http.Client{
+			Timeout: 15 * time.Second,
+			CheckRedirect: func(req *http.Request, via []*http.Request) error {
+				return http.ErrUseLastResponse
+			},
+		},
 	}
 }
