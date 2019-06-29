@@ -36,7 +36,7 @@ func (p *sbxProduct) launchMonitor() {
 			if p.PageRemoved {
 				// log.Printf("[INFO] No Stock Update (Page Removed) - %v", p.URL)
 			} else {
-				log.Printf("[INFO] No Stock Update (No Sizes) - %v", p.ProductInfo.ProductName)
+				// log.Printf("[INFO] No Stock Update (No Sizes) - %v", p.ProductInfo.ProductName)
 			}
 		}
 
