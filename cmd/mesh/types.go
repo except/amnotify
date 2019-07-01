@@ -2,12 +2,12 @@ package main
 
 import (
 	"net/http"
-	"net/http/cookiejar"
 )
 
 type meshSiteConfig map[string]*meshSite
 
 type meshSite struct {
+	SiteName    string   `json:"SiteName"`
 	SiteURL     string   `json:"SiteUrl"`
 	UserAgent   string   `json:"UserAgent"`
 	StoreCode   string   `json:"StoreCode"`
@@ -29,14 +29,14 @@ type meshConfigProduct struct {
 }
 
 type meshFrontendTask struct {
-	SKU           string
-	WishlistID    string
-	Site          *meshSite
-	SiteCode      string
-	Client        *http.Client
-	ProductInfo   *meshProductInfo
-	SessionJar    *cookiejar.Jar
-	ProductSKUMap map[string]meshProductSKU
+	SKU            string
+	WishlistID     string
+	Site           *meshSite
+	SiteCode       string
+	Client         *http.Client
+	ProductInfo    *meshProductInfo
+	SessionCookies map[string]*http.Cookie
+	ProductSKUMap  map[string]meshProductSKU
 }
 
 type meshBackendTask struct {
@@ -86,4 +86,14 @@ type meshProductSKU struct {
 	SKU         string `json:"SKU"`
 	Size        string `json:"size"`
 	StockStatus string `json:"stockStatus"`
+}
+
+type meshWishlistPayload struct {
+	Label       interface{} `json:"label"`
+	IsPublic    bool        `json:"isPublic"`
+	ProductSkus []string    `json:"productSkus"`
+}
+
+type meshWishlistMessage struct {
+	Message string `json:"message"`
 }
