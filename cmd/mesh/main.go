@@ -11,8 +11,9 @@ var (
 )
 
 const (
-	queueCookie   = "QueueCookie"
-	sessionCookie = "SessionCookie"
+	queueCookie     = "akavpwr_VP1"
+	queuePassCookie = "akavpau_VP1"
+	sessionCookie   = "session.ID"
 )
 
 func init() {
