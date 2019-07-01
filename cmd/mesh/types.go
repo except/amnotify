@@ -1,6 +1,9 @@
 package main
 
-import "net/http"
+import (
+	"net/http"
+	"net/http/cookiejar"
+)
 
 type meshSiteConfig map[string]*meshSite
 
@@ -15,7 +18,10 @@ type meshSite struct {
 	WebhookUrls []string `json:"WebhookUrls"`
 }
 
-type meshConfig []meshConfigProduct
+type meshConfig struct {
+	ProxyArray []string            `json:"ProxyArray"`
+	Tasks      []meshConfigProduct `json:"Tasks"`
+}
 
 type meshConfigProduct struct {
 	SKU   string   `json:"SKU"`
@@ -24,18 +30,22 @@ type meshConfigProduct struct {
 
 type meshFrontendTask struct {
 	SKU           string
+	WishlistID    string
 	Site          *meshSite
+	SiteCode      string
 	Client        *http.Client
 	ProductInfo   *meshProductInfo
-	ProductSKUMap map[string]*meshProductSKU
+	SessionJar    *cookiejar.Jar
+	ProductSKUMap map[string]meshProductSKU
 }
 
 type meshBackendTask struct {
 	SKU           string
 	Site          *meshSite
+	SiteCode      string
 	Client        *http.Client
 	ProductInfo   *meshProductInfo
-	ProductSKUMap map[string]*meshProductSKU
+	ProductSKUMap map[string]meshProductSKU
 }
 
 type meshProductInfo struct {
@@ -60,7 +70,20 @@ type meshFrontendWishlist struct {
 	} `json:"content"`
 }
 
+type meshBackendProduct struct {
+	ID        string `json:"ID"`
+	SKU       string `json:"SKU"`
+	Name      string `json:"name"`
+	MainImage string `json:"mainImage"`
+	Price     struct {
+		Amount   string `json:"amount"`
+		Currency string `json:"currency"`
+	} `json:"price"`
+	Options map[string]meshProductSKU `json:"options"`
+}
+
 type meshProductSKU struct {
 	SKU         string `json:"SKU"`
+	Size        string `json:"size"`
 	StockStatus string `json:"stockStatus"`
 }
