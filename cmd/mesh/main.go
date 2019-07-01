@@ -1,7 +1,11 @@
 package main
 
 import (
+	"encoding/json"
+	"io/ioutil"
+	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -17,7 +21,35 @@ const (
 )
 
 func init() {
+	siteConfigFile, err := os.Open("regions.json")
 
+	if err != nil {
+		log.Printf("[ERROR] [SITE CONFIG] %v", err.Error())
+	}
+
+	defer siteConfigFile.Close()
+	siteConfigBytes, err := ioutil.ReadAll(siteConfigFile)
+
+	if err != nil {
+		log.Printf("[ERROR] [SITE CONFIG] %v", err.Error())
+	}
+
+	json.Unmarshal(siteConfigBytes, &siteConfig)
+
+	configFile, err := os.Open("config.json")
+
+	if err != nil {
+		log.Printf("[ERROR] [CONFIG] %v", err.Error())
+	}
+
+	defer configFile.Close()
+	configBytes, err := ioutil.ReadAll(configFile)
+
+	if err != nil {
+		log.Printf("[ERROR] [CONFIG] %v", err.Error())
+	}
+
+	json.Unmarshal(configBytes, &config)
 }
 
 func main() {
