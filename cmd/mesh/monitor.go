@@ -38,6 +38,7 @@ func (t *meshFrontendTask) Monitor() {
 			log.Printf("Unhandled error (Frontend) - %v", err.Error())
 			log.Printf("[INFO] Resetting task (Frontend) - %v - %v", t.SKU, t.SiteCode)
 			t.ResetTask()
+			time.Sleep(3 * time.Second)
 			continue
 		}
 
@@ -303,15 +304,15 @@ func (t *meshFrontendTask) AddToWishlist() (*http.Cookie, error) {
 			}
 		}
 
-		log.Printf("Item may have been added to wishlist, assuming failure (Frontend) - %v - %v", t.SKU, t.SiteCode)
+		log.Printf("Item may have been added to wishlist, assuming failure (Frontend - AddToWishlist) - %v - %v", t.SKU, t.SiteCode)
 		return nil, errNoWishlist
 	case 502:
-		log.Printf("[WARN] Item could not be wishlisted (Frontend) - %v - %v", t.SKU, t.SiteCode)
+		log.Printf("[WARN] Item could not be wishlisted (Frontend - AddToWishlist) - %v - %v", t.SKU, t.SiteCode)
 		return nil, errItemOOS
 	case 403:
 		return nil, errTaskBanned
 	default:
-		return nil, fmt.Errorf("Invalid status code (Frontend) - %v - %v", t.SKU, t.SiteCode)
+		return nil, fmt.Errorf("Invalid status code - %v (Frontend - AddToWishlist) - %v - %v", resp.StatusCode, t.SKU, t.SiteCode)
 	}
 }
 
@@ -518,10 +519,9 @@ func (t *meshFrontendTask) CheckUpdate(SKUMap map[string]meshProductSKU) {
 
 	if updateAvailable {
 		log.Printf("[INFO] Product stock update detected (Frontend) - %v - %v", t.SKU, t.SiteCode)
-		go t.SendUpdate("https://discordapp.com/api/webhooks/590144361564733460/2rokA0kfWqxZhiNsbSlCj8n4s8pEndiZbRg1R0xM_MCyEmJ1_8fDo5oKwMki_mcXuKft")
-		// for _, webhookURL := range t.Site.WebhookUrls {
-		// 	go t.SendUpdate(webhookURL)
-		// }
+		for _, webhookURL := range t.Site.WebhookUrls {
+			go t.SendUpdate(webhookURL)
+		}
 	} else {
 		log.Printf("[INFO] No product stock update (Frontend) - %v - %v", t.SKU, t.SiteCode)
 	}
