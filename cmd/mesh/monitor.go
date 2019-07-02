@@ -44,7 +44,7 @@ func (t *meshFrontendTask) Monitor() {
 
 		t.CheckUpdate(SKUMap)
 
-		time.Sleep(1 * time.Second)
+		time.Sleep(750 * time.Millisecond)
 	}
 }
 
@@ -308,6 +308,7 @@ func (t *meshFrontendTask) AddToWishlist() (*http.Cookie, error) {
 		return nil, errNoWishlist
 	case 502:
 		log.Printf("[WARN] Item could not be wishlisted (Frontend - AddToWishlist) - %v - %v", t.SKU, t.SiteCode)
+		t.FirstRun = false
 		return nil, errItemOOS
 	case 403:
 		return nil, errTaskBanned
@@ -518,10 +519,16 @@ func (t *meshFrontendTask) CheckUpdate(SKUMap map[string]meshProductSKU) {
 	}
 
 	if updateAvailable {
-		log.Printf("[INFO] Product stock update detected (Frontend) - %v - %v", t.SKU, t.SiteCode)
-		for _, webhookURL := range t.Site.WebhookUrls {
-			go t.SendUpdate(webhookURL)
+		if !t.FirstRun {
+			log.Printf("[INFO] Product stock update detected (Frontend) - %v - %v", t.SKU, t.SiteCode)
+			for _, webhookURL := range t.Site.WebhookUrls {
+				go t.SendUpdate(webhookURL)
+			}
+		} else {
+			log.Printf("[INFO] Ignoring first run stock update (Frontend) - %v - %v", t.SKU, t.SiteCode)
+			t.FirstRun = false
 		}
+
 	} else {
 		log.Printf("[INFO] No product stock update (Frontend) - %v - %v", t.SKU, t.SiteCode)
 	}

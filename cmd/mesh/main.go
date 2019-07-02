@@ -101,6 +101,7 @@ func createFrontendTask(SKU, regionCode string) *meshFrontendTask {
 	if site, siteExists := siteConfig[regionCode]; siteExists {
 		return &meshFrontendTask{
 			SKU:            SKU,
+			FirstRun:       true,
 			Site:           site,
 			SiteCode:       regionCode,
 			SessionCookies: make(map[string]*http.Cookie),
@@ -118,6 +119,7 @@ func createBackendTask(SKU, regionCode string) *meshBackendTask {
 	if site, siteExists := siteConfig[regionCode]; siteExists {
 		return &meshBackendTask{
 			SKU:           SKU,
+			FirstRun:      true,
 			Site:          site,
 			SiteCode:      regionCode,
 			ProductSKUMap: make(map[string]meshProductSKU),

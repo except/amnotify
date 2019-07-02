@@ -31,6 +31,7 @@ type meshConfigProduct struct {
 type meshFrontendTask struct {
 	SKU            string
 	WishlistID     string
+	FirstRun       bool
 	Site           *meshSite
 	SiteCode       string
 	Client         *http.Client
@@ -41,6 +42,7 @@ type meshFrontendTask struct {
 
 type meshBackendTask struct {
 	SKU           string
+	FirstRun      bool
 	Site          *meshSite
 	SiteCode      string
 	Client        *http.Client
