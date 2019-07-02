@@ -306,6 +306,10 @@ func (t *meshFrontendTask) AddToWishlist() (*http.Cookie, error) {
 
 		log.Printf("Item may have been added to wishlist, assuming failure (Frontend - AddToWishlist) - %v - %v", t.SKU, t.SiteCode)
 		return nil, errNoWishlist
+	case 500:
+		log.Printf("[WARN] Item could not be wishlisted (Frontend - AddToWishlist) - %v - %v", t.SKU, t.SiteCode)
+		t.FirstRun = false
+		return nil, errItemOOS
 	case 502:
 		log.Printf("[WARN] Item could not be wishlisted (Frontend - AddToWishlist) - %v - %v", t.SKU, t.SiteCode)
 		t.FirstRun = false
