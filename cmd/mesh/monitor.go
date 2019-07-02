@@ -12,6 +12,8 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/dchest/uniuri"
+
 	"github.com/PuerkitoBio/goquery"
 )
 
@@ -27,15 +29,18 @@ func (t *meshFrontendTask) Monitor() {
 	t.SetProxy()
 
 	for {
-		skuMap, err := t.GetSizes()
+		SKUMap, err := t.GetSizes()
 
 		if err != nil {
 			log.Printf("Unhandled error (Frontend) - %v", err.Error())
 			log.Printf("[INFO] Resetting task (Frontend) - %v - %v", t.SKU, t.SiteCode)
 			t.ResetTask()
-
+			continue
 		}
 
+		t.CheckUpdate(SKUMap)
+
+		time.Sleep(3 * time.Second)
 	}
 }
 
@@ -57,7 +62,7 @@ func (t *meshFrontendTask) SetProxy() {
 
 		log.Printf("[INFO] Running Proxy (%v) (Frontend) - %v - %v", proxyURL.String(), t.SKU, t.SiteCode)
 	} else {
-		log.Printf("[WARN] Running Proxyless - %v - %v", t.SKU, t.SiteCode)
+		log.Printf("[WARN] Running Proxyless (Frontend) - %v - %v", t.SKU, t.SiteCode)
 	}
 }
 
@@ -166,7 +171,7 @@ func (t *meshFrontendTask) GetSizes() (map[string]meshProductSKU, error) {
 
 			if wishlistID != "" && err == nil {
 				t.WishlistID = wishlistID
-				log.Printf("[INFO] Set WishlistID - %v - %v", t.SKU, t.SiteCode)
+				log.Printf("[INFO] Set WishlistID (Frontend)- %v - %v", t.SKU, t.SiteCode)
 				break
 			}
 		}
@@ -201,12 +206,12 @@ func (t *meshFrontendTask) GetSizes() (map[string]meshProductSKU, error) {
 		}
 
 		if wishlist != nil && err == nil {
-			log.Printf("[INFO] Got wishlist response - %v - %v", t.SKU, t.SiteCode)
+			log.Printf("[INFO] Got wishlist response (Frontend) - %v - %v", t.SKU, t.SiteCode)
 			break
 		}
 	}
 
-	var skuMap map[string]meshProductSKU
+	var SKUMap map[string]meshProductSKU
 
 	for _, content := range wishlist.Content {
 		for _, product := range content.Products {
@@ -220,12 +225,12 @@ func (t *meshFrontendTask) GetSizes() (map[string]meshProductSKU, error) {
 					}
 				}
 
-				skuMap = product.Product.Options
+				SKUMap = product.Product.Options
 			}
 		}
 	}
 
-	return skuMap, nil
+	return SKUMap, nil
 }
 
 func (t *meshFrontendTask) AddToWishlist() (*http.Cookie, error) {
@@ -295,10 +300,10 @@ func (t *meshFrontendTask) AddToWishlist() (*http.Cookie, error) {
 			}
 		}
 
-		log.Printf("Item may have been added to wishlist, assuming failure - %v - %v", t.SKU, t.SiteCode)
+		log.Printf("Item may have been added to wishlist, assuming failure (Frontend) - %v - %v", t.SKU, t.SiteCode)
 		return nil, errNoWishlist
 	case 502:
-		log.Printf("[WARN] Item could not be wishlisted - %v - %v", t.SKU, t.SiteCode)
+		log.Printf("[WARN] Item could not be wishlisted (Frontend) - %v - %v", t.SKU, t.SiteCode)
 		return nil, errItemOOS
 	case 403:
 		return nil, errTaskBanned
@@ -352,10 +357,10 @@ func (t *meshFrontendTask) GetWishlistID() (string, error) {
 		wishlistID, wishlistExists := doc.Find(fmt.Sprintf(`*[data-sku="%v%v"]`, t.SKU, t.Site.SKUSuffix)).Attr("data-wishlistid")
 
 		if wishlistExists {
-			log.Printf("[INFO] Found Wishlist - %v - %v - %v", wishlistID, t.SKU, t.SiteCode)
+			log.Printf("[INFO] Found Wishlist (Frontend) - %v - %v - %v", wishlistID, t.SKU, t.SiteCode)
 			return wishlistID, nil
 		}
-		log.Printf("[WARN] No Wishlist - %v - %v", t.SKU, t.SiteCode)
+		log.Printf("[WARN] No Wishlist (Frontend) - %v - %v", t.SKU, t.SiteCode)
 		return "", nil
 	case 403:
 		return "", errTaskBanned
@@ -375,7 +380,7 @@ func (t *meshFrontendTask) GetWishlist() (*meshFrontendWishlist, error) {
 		return nil, errNoWishlist
 	}
 
-	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%v/wishlists/ajax/%v/", t.Site.SiteURL, t.WishlistID), nil)
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%v/wishlists/ajax/%v/?%v=%v", t.Site.SiteURL, t.WishlistID, uniuri.NewLen(8), uniuri.NewLen(8)), nil)
 
 	if err != nil {
 		return nil, err
@@ -412,9 +417,9 @@ func (t *meshFrontendTask) GetWishlist() (*meshFrontendWishlist, error) {
 		}
 
 		if wishlist.Content != nil {
-			log.Printf("[INFO] Wishlist not empty - %v - %v - %v", t.WishlistID, t.SKU, t.SiteCode)
+			log.Printf("[INFO] Wishlist not empty (Frontend) - %v - %v - %v", t.WishlistID, t.SKU, t.SiteCode)
 		} else {
-			log.Printf("[WARN] Wishlist empty - %v - %v - %v", t.WishlistID, t.SKU, t.SiteCode)
+			log.Printf("[WARN] Wishlist empty (Frontend) - %v - %v - %v", t.WishlistID, t.SKU, t.SiteCode)
 		}
 
 		return &wishlist, nil
@@ -439,12 +444,12 @@ func (t *meshFrontendTask) HandleQueue(queueURL string) {
 	queuePass, err := t.QueueBrute(queueURL)
 
 	if err != nil {
-		log.Printf("Error (Queue Bruter) - %v - %v", t.SKU, err.Error())
+		log.Printf("Error (Frontend - Queue Bruter) - %v - %v", t.SKU, err.Error())
 		t.SetProxy()
 	}
 
 	if queuePass != nil {
-		log.Printf("[INFO] Passed queue - %v - %v - %v", queuePass.Value, t.SKU, t.SiteCode)
+		log.Printf("[INFO] Passed queue (Frontend) - %v - %v - %v", queuePass.Value, t.SKU, t.SiteCode)
 		t.SessionCookies[queuePassCookie] = queuePass
 		return
 	}
@@ -495,6 +500,31 @@ func (t *meshFrontendTask) QueueBrute(queueURL string) (*http.Cookie, error) {
 	default:
 		return nil, fmt.Errorf("Invalid status code (Frontend - Queue Brute) - %v - %v", t.SKU, t.SiteCode)
 	}
+}
+
+func (t *meshFrontendTask) CheckUpdate(SKUMap map[string]meshProductSKU) {
+	updateAvailable := false
+
+	for sizeName, productSKU := range SKUMap {
+		if currentProductSKU, SKUExists := t.ProductSKUMap[sizeName]; SKUExists {
+			if productSKU.StockStatus == "IN STOCK" && currentProductSKU.StockStatus == "OUT OF STOCK" {
+				updateAvailable = true
+			}
+		} else {
+			if productSKU.StockStatus == "IN STOCK" {
+				updateAvailable = true
+			}
+		}
+
+		t.ProductSKUMap[sizeName] = productSKU
+	}
+
+	if updateAvailable {
+		log.Printf("[INFO] Product stock update detected (Frontend) - %v - %v", t.SKU, t.SiteCode)
+	} else {
+		log.Printf("[INFO] No product stock update (Frontend) - %v - %v", t.SKU, t.SiteCode)
+	}
+
 }
 
 func (t *meshBackendTask) Monitor() {

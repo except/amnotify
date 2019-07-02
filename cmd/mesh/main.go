@@ -34,7 +34,11 @@ func init() {
 		log.Printf("[ERROR] [SITE CONFIG] %v", err.Error())
 	}
 
-	json.Unmarshal(siteConfigBytes, &siteConfig)
+	err = json.Unmarshal(siteConfigBytes, &siteConfig)
+
+	if err != nil {
+		log.Printf("[ERROR] [SITE CONFIG] %v", err.Error())
+	}
 
 	configFile, err := os.Open("config.json")
 
@@ -43,13 +47,18 @@ func init() {
 	}
 
 	defer configFile.Close()
+
 	configBytes, err := ioutil.ReadAll(configFile)
 
 	if err != nil {
 		log.Printf("[ERROR] [CONFIG] %v", err.Error())
 	}
 
-	json.Unmarshal(configBytes, &config)
+	err = json.Unmarshal(configBytes, &config)
+
+	if err != nil {
+		log.Printf("[ERROR] [CONFIG] %v", err.Error())
+	}
 }
 
 func main() {
@@ -63,6 +72,7 @@ func createFrontendTask(SKU, regionCode string) *meshFrontendTask {
 			Site:           site,
 			SiteCode:       regionCode,
 			SessionCookies: make(map[string]*http.Cookie),
+			ProductSKUMap:  make(map[string]meshProductSKU),
 			Client: &http.Client{
 				Timeout: 15 * time.Second,
 			},
@@ -75,9 +85,10 @@ func createFrontendTask(SKU, regionCode string) *meshFrontendTask {
 func createBackendTask(SKU, regionCode string) *meshBackendTask {
 	if site, siteExists := siteConfig[regionCode]; siteExists {
 		return &meshBackendTask{
-			SKU:      SKU,
-			Site:     site,
-			SiteCode: regionCode,
+			SKU:           SKU,
+			Site:          site,
+			SiteCode:      regionCode,
+			ProductSKUMap: make(map[string]meshProductSKU),
 			Client: &http.Client{
 				Timeout: 15 * time.Second,
 			},
