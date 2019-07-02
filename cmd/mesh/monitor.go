@@ -10,6 +10,9 @@ import (
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
+	"sort"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/dchest/uniuri"
@@ -40,7 +43,7 @@ func (t *meshFrontendTask) Monitor() {
 
 		t.CheckUpdate(SKUMap)
 
-		time.Sleep(3 * time.Second)
+		time.Sleep(1 * time.Second)
 	}
 }
 
@@ -126,7 +129,7 @@ func (t *meshFrontendTask) GetSizes() (map[string]meshProductSKU, error) {
 				case errTaskBanned:
 					t.SetProxy()
 					log.Printf("[INFO] Delaying retry for banned task (Frontend - AddToWishlist) - %v - %v", t.SKU, t.SiteCode)
-					time.Sleep(1 * time.Second)
+					time.Sleep(3 * time.Second)
 					continue
 				default:
 					return nil, err
@@ -158,7 +161,7 @@ func (t *meshFrontendTask) GetSizes() (map[string]meshProductSKU, error) {
 				case errTaskBanned:
 					t.SetProxy()
 					log.Printf("[INFO] Delaying retry for banned task (Frontend - GetWishlistID) - %v - %v", t.SKU, t.SiteCode)
-					time.Sleep(1 * time.Second)
+					time.Sleep(3 * time.Second)
 					continue
 				case errNoWishlist:
 					log.Printf("[INFO] Resetting task as no wishlist detected (Frontend - GetWishlistID) - %v - %v", t.SKU, t.SiteCode)
@@ -171,7 +174,7 @@ func (t *meshFrontendTask) GetSizes() (map[string]meshProductSKU, error) {
 
 			if wishlistID != "" && err == nil {
 				t.WishlistID = wishlistID
-				log.Printf("[INFO] Set WishlistID (Frontend)- %v - %v", t.SKU, t.SiteCode)
+				log.Printf("[INFO] Set WishlistID (Frontend) - %v - %v", t.SKU, t.SiteCode)
 				break
 			}
 		}
@@ -194,7 +197,7 @@ func (t *meshFrontendTask) GetSizes() (map[string]meshProductSKU, error) {
 			case errTaskBanned:
 				t.SetProxy()
 				log.Printf("[INFO] Delaying retry for banned task (Frontend - GetWishlist) - %v - %v", t.SKU, t.SiteCode)
-				time.Sleep(1 * time.Second)
+				time.Sleep(3 * time.Second)
 				continue
 			case errNoWishlist:
 				log.Printf("[INFO] Resetting task as no wishlist detected (Frontend - GetWishlist) - %v - %v", t.SKU, t.SiteCode)
@@ -416,12 +419,6 @@ func (t *meshFrontendTask) GetWishlist() (*meshFrontendWishlist, error) {
 			return nil, err
 		}
 
-		if wishlist.Content != nil {
-			log.Printf("[INFO] Wishlist not empty (Frontend) - %v - %v - %v", t.WishlistID, t.SKU, t.SiteCode)
-		} else {
-			log.Printf("[WARN] Wishlist empty (Frontend) - %v - %v - %v", t.WishlistID, t.SKU, t.SiteCode)
-		}
-
 		return &wishlist, nil
 	case 403:
 		return nil, errTaskBanned
@@ -507,11 +504,11 @@ func (t *meshFrontendTask) CheckUpdate(SKUMap map[string]meshProductSKU) {
 
 	for sizeName, productSKU := range SKUMap {
 		if currentProductSKU, SKUExists := t.ProductSKUMap[sizeName]; SKUExists {
-			if productSKU.StockStatus == "IN STOCK" && currentProductSKU.StockStatus == "OUT OF STOCK" {
+			if productSKU.StockStatus == itemInStock && currentProductSKU.StockStatus == itemOutOfStock {
 				updateAvailable = true
 			}
 		} else {
-			if productSKU.StockStatus == "IN STOCK" {
+			if productSKU.StockStatus == itemInStock {
 				updateAvailable = true
 			}
 		}
@@ -521,10 +518,134 @@ func (t *meshFrontendTask) CheckUpdate(SKUMap map[string]meshProductSKU) {
 
 	if updateAvailable {
 		log.Printf("[INFO] Product stock update detected (Frontend) - %v - %v", t.SKU, t.SiteCode)
+		go t.SendUpdate("https://discordapp.com/api/webhooks/590144361564733460/2rokA0kfWqxZhiNsbSlCj8n4s8pEndiZbRg1R0xM_MCyEmJ1_8fDo5oKwMki_mcXuKft")
+		// for _, webhookURL := range t.Site.WebhookUrls {
+		// 	go t.SendUpdate(webhookURL)
+		// }
 	} else {
 		log.Printf("[INFO] No product stock update (Frontend) - %v - %v", t.SKU, t.SiteCode)
 	}
 
+}
+
+func (t *meshFrontendTask) SendUpdate(webhookURL string) {
+	var sizeRun []float64
+
+	for size := range t.ProductSKUMap {
+		sizeFloat, err := strconv.ParseFloat(size, 64)
+		if err != nil {
+			continue
+		}
+
+		sizeRun = append(sizeRun, sizeFloat)
+	}
+
+	sort.Float64s(sizeRun)
+
+	webhook := &discordWebhook{}
+
+	webhookEmbed := discordEmbed{
+		URL:   fmt.Sprintf("%v/product/_/%v%v/", t.Site.SiteURL, t.SKU, t.Site.SKUSuffix),
+		Color: 16721733,
+	}
+
+	priceField := discordEmbedField{
+		Name:   "Price",
+		Inline: false,
+	}
+
+	if t.ProductInfo != nil {
+		webhookEmbed.Title = fmt.Sprintf("%v | %v", t.ProductInfo.Name, t.Site.SiteName)
+
+		priceField.Value = t.ProductInfo.Price
+
+		webhookEmbed.Thumbnail = discordEmbedThumbnail{
+			URL: t.ProductInfo.ImageURL,
+		}
+	} else {
+		webhookEmbed.Title = fmt.Sprintf("%v | %v", t.SKU, t.Site.SiteName)
+
+		priceField.Value = "N/A"
+	}
+
+	webhookEmbed.Fields = append(webhookEmbed.Fields, priceField)
+
+	webhookEmbed.Fields = append(webhookEmbed.Fields, discordEmbedField{
+		Name:   "Product SKU",
+		Value:  fmt.Sprintf("%v%v", t.SKU, t.Site.SKUSuffix),
+		Inline: false,
+	})
+
+	var availSize []string
+	var availSKU []string
+
+	for _, floatSize := range sizeRun {
+		sortedSize := fmt.Sprintf("%g", floatSize)
+		prodSKU := t.ProductSKUMap[sortedSize]
+
+		if prodSKU.StockStatus == itemInStock {
+			availSize = append(availSize, fmt.Sprintf("UK %v", sortedSize))
+			availSKU = append(availSKU, prodSKU.SKU)
+		}
+	}
+
+	if len(availSize) > 0 && len(availSKU) > 0 {
+		webhookEmbed.Fields = append(webhookEmbed.Fields, discordEmbedField{
+			Name:   "Size Availability",
+			Value:  strings.Join(availSize, "\n"),
+			Inline: true,
+		})
+
+		webhookEmbed.Fields = append(webhookEmbed.Fields, discordEmbedField{
+			Name:   "SKU Availability",
+			Value:  strings.Join(availSKU, "\n"),
+			Inline: true,
+		})
+	}
+
+	webhookEmbed.Footer = discordEmbedFooter{
+		Text:    fmt.Sprintf("AMNotify | MESH Commerce • %v", time.Now().Format("15:04:05.000")),
+		IconURL: "https://i.imgur.com/vv2dyGR.png",
+	}
+
+	webhook.Embeds = append(webhook.Embeds, webhookEmbed)
+
+	webhookPayload, err := json.Marshal(webhook)
+
+	if err != nil {
+		log.Printf("[ERROR] [WEBHOOK] %v - %v - %v", t.SKU, t.SiteCode, err.Error())
+		return
+	}
+
+	req, err := http.NewRequest(http.MethodPost, webhookURL, bytes.NewBuffer(webhookPayload))
+
+	if err != nil {
+		log.Printf("[ERROR] [WEBHOOK] %v - %v - %v", t.SKU, t.SiteCode, err.Error())
+		return
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := client.Do(req)
+
+	if err != nil {
+		log.Printf("[ERROR] [WEBHOOK] %v - %v - %v", t.SKU, t.SiteCode, err.Error())
+		return
+	}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode == 204 {
+		log.Printf("[SUCCESS] Webhook sent - %v - %v", t.SKU, t.SiteCode)
+	} else if resp.StatusCode == 429 {
+		log.Printf("[WARN] Retrying, webhook ratelimit - %v - %v", t.SKU, t.SiteCode)
+		time.Sleep(5 * time.Second)
+		t.SendUpdate(webhookURL)
+	} else {
+		log.Printf("[WARN] Invalid Status - %v - %v - %v", t.SKU, t.SiteCode, resp.Status)
+	}
+
+	return
 }
 
 func (t *meshBackendTask) Monitor() {

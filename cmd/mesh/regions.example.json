@@ -13,7 +13,7 @@
         ]
     },
     "FP_FR": {
-        "SiteName": "Footpatrol France",
+        "SiteName": "Footpatrol FR",
         "SiteUrl": "https://www.footpatrol.fr",
         "UserAgent": "footpatrolfr/6.3.2.1446 (iphone-app; iOS 12.3.1)",
         "StoreCode": "footpatrolfr",
@@ -52,7 +52,7 @@
         ]
     },
     "SZ_DE": {
-        "SiteName": "size? Germany",
+        "SiteName": "size? DE",
         "SiteUrl": "https://www.sizeofficial.de",
         "UserAgent": "sizede/6.3.2.1443 (iphone-app; iOS 12.3.1)",
         "StoreCode": "sizede",
@@ -65,7 +65,7 @@
         ]
     },
     "SZ_DK": {
-        "SiteName": "size? Denmark",
+        "SiteName": "size? DK",
         "SiteUrl": "https://www.sizeofficial.dk",
         "UserAgent": "sizedk/6.3.2.1443 (iphone-app; iOS 12.3.1)",
         "StoreCode": "sizedk",
@@ -78,7 +78,7 @@
         ]
     },
     "SZ_ES": {
-        "SiteName": "size? Spain",
+        "SiteName": "size? ES",
         "SiteUrl": "hhttps://www.sizeofficial.es",
         "UserAgent": "sizees/6.3.2.1443 (iphone-app; iOS 12.3.1)",
         "StoreCode": "sizes",
@@ -91,7 +91,7 @@
         ]
     },
     "SZ_FR": {
-        "SiteName": "size? France",
+        "SiteName": "size? FR",
         "SiteUrl": "https://www.sizeofficial.fr",
         "UserAgent": "sizefr/6.3.2.1443 (iphone-app; iOS 12.3.1)",
         "StoreCode": "sizefr",
@@ -104,7 +104,7 @@
         ]
     },
     "SZ_IE": {
-        "SiteName": "size? Ireland",
+        "SiteName": "size? IE",
         "SiteUrl": "https://www.sizeofficial.ie",
         "UserAgent": "sizeie/6.3.2.1443 (iphone-app; iOS 12.3.1)",
         "StoreCode": "sizeie",
@@ -117,7 +117,7 @@
         ]
     },
     "SZ_IT": {
-        "SiteName": "size? Italy",
+        "SiteName": "size? IT",
         "SiteUrl": "https://www.sizeofficial.it",
         "UserAgent": "sizeit/6.3.2.1443 (iphone-app; iOS 12.3.1)",
         "StoreCode": "sizeit",
@@ -130,7 +130,7 @@
         ]
     },
     "SZ_NL": {
-        "SiteName": "size? Netherlands",
+        "SiteName": "size? NL",
         "SiteUrl": "https://www.sizeofficial.nl",
         "UserAgent": "sizenl/6.3.2.1443 (iphone-app; iOS 12.3.1)",
         "StoreCode": "sizenl",
@@ -143,7 +143,7 @@
         ]
     },
     "SZ_SE": {
-        "SiteName": "size? Sweden",
+        "SiteName": "size? SE",
         "SiteUrl": "https://www.sizeofficial.nl",
         "UserAgent": "sizese/6.3.2.1443 (iphone-app; iOS 12.3.1)",
         "StoreCode": "sizese",
@@ -169,7 +169,7 @@
         ]
     },
     "JD_BE": {
-        "SiteName": "JDSports Belgium",
+        "SiteName": "JDSports BE",
         "SiteUrl": "https://www.jdsports.be",
         "UserAgent": "jdsportsbe/6.3.5.1503 (iphone-app; iOS 12.3.1)",
         "StoreCode": "jdsportsbe",
@@ -182,7 +182,7 @@
         ]
     },
     "JD_DE": {
-        "SiteName": "JDSports Germany",
+        "SiteName": "JDSports DE",
         "SiteUrl": "https://www.jdsports.de",
         "UserAgent": "jdsportsde/6.3.5.1503 (iphone-app; iOS 12.3.1)",
         "StoreCode": "jdsportsde",
@@ -195,7 +195,7 @@
         ]
     },
     "JD_DK": {
-        "SiteName": "JDSports Denmark",
+        "SiteName": "JDSports DK",
         "SiteUrl": "https://www.jdsports.dk",
         "UserAgent": "jdsportsdk/6.3.5.1503 (iphone-app; iOS 12.3.1)",
         "StoreCode": "jdsportsdk",
@@ -208,7 +208,7 @@
         ]
     },
     "JD_ES": {
-        "SiteName": "JDSports Spain",
+        "SiteName": "JDSports ES",
         "SiteUrl": "https://www.jdsports.es",
         "UserAgent": "jdsportses/6.3.5.1503 (iphone-app; iOS 12.3.1)",
         "StoreCode": "jdsportses",
@@ -221,7 +221,7 @@
         ]
     },
     "JD_FR": {
-        "SiteName": "JDSports France",
+        "SiteName": "JDSports FR",
         "SiteUrl": "https://www.jdsports.fr",
         "UserAgent": "jdsportsfr/6.3.5.1503 (iphone-app; iOS 12.3.1)",
         "StoreCode": "jdsportsfr",
@@ -234,7 +234,7 @@
         ]
     },
     "JD_IE": {
-        "SiteName": "JDSports Ireland",
+        "SiteName": "JDSports IE",
         "SiteUrl": "https://www.jdsports.ie",
         "UserAgent": "jdsportsie/6.3.5.1503 (iphone-app; iOS 12.3.1)",
         "StoreCode": "jdsportsie",
@@ -247,7 +247,7 @@
         ]
     },
     "JD_IT": {
-        "SiteName": "JDSports Italy",
+        "SiteName": "JDSports IT",
         "SiteUrl": "https://www.jdsports.it",
         "UserAgent": "jdsportsit/6.3.5.1503 (iphone-app; iOS 12.3.1)",
         "StoreCode": "jdsportsit",
@@ -260,7 +260,7 @@
         ]
     },
     "JD_MY": {
-        "SiteName": "JDSports Malaysia",
+        "SiteName": "JDSports MY",
         "SiteUrl": "https://www.jdsports.my",
         "UserAgent": "jdsportsmyf/6.3.5.1503 (iphone-app; iOS 12.3.1)",
         "StoreCode": "jdsportsmyf",
@@ -273,7 +273,7 @@
         ]
     },
     "JD_NL": {
-        "SiteName": "JDSports Netherlands",
+        "SiteName": "JDSports NL",
         "SiteUrl": "https://www.jdsports.nl",
         "UserAgent": "jdsportsnl/6.3.5.1503 (iphone-app; iOS 12.3.1)",
         "StoreCode": "jdsportsnl",
@@ -286,7 +286,7 @@
         ]
     },
     "JD_SE": {
-        "SiteName": "JDSports Sweden",
+        "SiteName": "JDSports SE",
         "SiteUrl": "https://www.jdsports.se",
         "UserAgent": "jdsportsse/6.3.5.1503 (iphone-app; iOS 12.3.1)",
         "StoreCode": "jdsportsse",
@@ -299,7 +299,7 @@
         ]
     },
     "JD_AU": {
-        "SiteName": "JDSports Australia",
+        "SiteName": "JDSports AU",
         "SiteUrl": "https://www.jd-sports.com.au",
         "UserAgent": "jdsportsau/6.3.5.1503 (iphone-app; iOS 12.3.1)",
         "StoreCode": "jdsportsau",

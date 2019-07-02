@@ -6,18 +6,26 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"sync"
 	"time"
 )
 
 var (
+	wg         sync.WaitGroup
 	config     meshConfig
 	siteConfig meshSiteConfig
+
+	client = &http.Client{
+		Timeout: 15 * time.Second,
+	}
 )
 
 const (
 	queueCookie     = "akavpwr_VP1"
 	queuePassCookie = "akavpau_VP1"
 	sessionCookie   = "session.ID"
+	itemInStock     = "IN STOCK"
+	itemOutOfStock  = "OUT OF STOCK"
 )
 
 func init() {
@@ -62,7 +70,31 @@ func init() {
 }
 
 func main() {
+	log.SetFlags(log.LstdFlags | log.Lmicroseconds)
 
+	for _, task := range config.Tasks {
+		for _, regionCode := range task.Sites {
+			wg.Add(1)
+
+			go func(SKU, regionCode string) {
+				defer wg.Done()
+				task := createFrontendTask(SKU, regionCode)
+				if task != nil {
+					task.Monitor()
+				}
+			}(task.SKU, regionCode)
+
+			// go func(SKU, regionCode string) {
+			// 	defer wg.Done()
+			// 	task := createBackendTask(SKU, regionCode)
+			// 	if task != nil {
+			// 		task.Monitor()
+			// 	}
+			// }(task.SKU, regionCode)
+		}
+	}
+
+	wg.Wait()
 }
 
 func createFrontendTask(SKU, regionCode string) *meshFrontendTask {

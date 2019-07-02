@@ -97,3 +97,31 @@ type meshWishlistPayload struct {
 type meshWishlistMessage struct {
 	Message string `json:"message"`
 }
+
+type discordWebhook struct {
+	Embeds []discordEmbed `json:"embeds"`
+}
+
+type discordEmbed struct {
+	Title     string                `json:"title"`
+	URL       string                `json:"url"`
+	Color     int                   `json:"color"`
+	Footer    discordEmbedFooter    `json:"footer"`
+	Thumbnail discordEmbedThumbnail `json:"thumbnail"`
+	Fields    []discordEmbedField   `json:"fields"`
+}
+
+type discordEmbedFooter struct {
+	IconURL string `json:"icon_url"`
+	Text    string `json:"text"`
+}
+
+type discordEmbedThumbnail struct {
+	URL string `json:"url"`
+}
+
+type discordEmbedField struct {
+	Name   string `json:"name"`
+	Value  string `json:"value"`
+	Inline bool   `json:"inline"`
+}
