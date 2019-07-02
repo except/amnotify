@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"sync"
 	"time"
@@ -67,10 +68,19 @@ func init() {
 	if err != nil {
 		log.Printf("[ERROR] [CONFIG] %v", err.Error())
 	}
+
+	if err != nil {
+		panic(err)
+	}
 }
 
 func main() {
+	log.Printf("Loaded | Proxies [%v] - Tasks [%v]", len(config.ProxyArray), len(config.Tasks))
 	log.SetFlags(log.LstdFlags | log.Lmicroseconds)
+
+	for _, proxy := range config.ProxyArray {
+		testProxy(proxy)
+	}
 
 	for _, task := range config.Tasks {
 		for _, regionCode := range task.Sites {
@@ -95,6 +105,51 @@ func main() {
 	}
 
 	wg.Wait()
+}
+
+func testProxy(proxyStr string) {
+	testClient := &http.Client{
+		Timeout: 15 * time.Second,
+	}
+
+	proxyURL, err := url.Parse(proxyStr)
+
+	if err != nil {
+		log.Printf("[WARN] Proxy FAIL - %v", proxyStr)
+		return
+	}
+
+	testClient.Transport = &http.Transport{
+		Proxy: http.ProxyURL(proxyURL),
+	}
+
+	req, err := http.NewRequest(http.MethodGet, siteConfig["FP_UK"].SiteURL, nil)
+	req.Header.Set("Pragma", "no-cache")
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36")
+	req.Header.Set("Accept", "*/*")
+	req.Header.Set("Accept-Language", "en-GB,en-US;q=0.9,en;q=0.8")
+	req.Header.Set("Cache-Control", "no-cache")
+	req.Header.Set("X-Requested-With", "XMLHttpRequest")
+
+	if err != nil {
+		log.Printf("[WARN] Proxy FAIL - %v", proxyStr)
+		return
+	}
+
+	resp, err := testClient.Do(req)
+
+	if err != nil {
+		log.Printf("[WARN] Proxy FAIL - %v", proxyStr)
+		return
+	}
+
+	if resp.StatusCode == 200 {
+		log.Printf("[SUCCESS] Proxy PASS - %v", proxyStr)
+		return
+	}
+
+	log.Printf("[WARN] Proxy FAIL - %v - %v", resp.StatusCode, proxyStr)
+	return
 }
 
 func createFrontendTask(SKU, regionCode string) *meshFrontendTask {
