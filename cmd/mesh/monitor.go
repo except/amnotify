@@ -124,7 +124,7 @@ func (t *meshFrontendTask) GetSizes() (map[string]meshProductSKU, error) {
 					log.Printf("[INFO] Retrying (Frontend - AddToWishlist) - %v - %v", t.SKU, t.SiteCode)
 					continue
 				case errItemOOS:
-					log.Printf("[INFO] Delaying retry for OOS item (Frontend - AddToWishlist) - %v - %v", t.SKU, t.SiteCode)
+					// log.Printf("[INFO] Delaying retry for OOS item (Frontend - AddToWishlist) - %v - %v", t.SKU, t.SiteCode)
 					time.Sleep(1 * time.Second)
 					continue
 				case errTaskBanned:
@@ -217,6 +217,10 @@ func (t *meshFrontendTask) GetSizes() (map[string]meshProductSKU, error) {
 
 	var SKUMap map[string]meshProductSKU
 
+	if wishlist.Content == nil {
+		return nil, errNoWishlist
+	}
+
 	for _, content := range wishlist.Content {
 		for _, product := range content.Products {
 			if product.Product.SKU == fmt.Sprintf("%v%v", t.SKU, t.Site.SKUSuffix) {
@@ -307,11 +311,9 @@ func (t *meshFrontendTask) AddToWishlist() (*http.Cookie, error) {
 		log.Printf("Item may have been added to wishlist, assuming failure (Frontend - AddToWishlist) - %v - %v", t.SKU, t.SiteCode)
 		return nil, errNoWishlist
 	case 500:
-		log.Printf("[WARN] Item could not be wishlisted (Frontend - AddToWishlist) - %v - %v", t.SKU, t.SiteCode)
 		t.FirstRun = false
 		return nil, errItemOOS
 	case 502:
-		log.Printf("[WARN] Item could not be wishlisted (Frontend - AddToWishlist) - %v - %v", t.SKU, t.SiteCode)
 		t.FirstRun = false
 		return nil, errItemOOS
 	case 403:
