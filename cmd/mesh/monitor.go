@@ -290,6 +290,12 @@ func (t *meshFrontendTask) AddToWishlist() (*http.Cookie, error) {
 			return nil, errInQueue
 		}
 
+		for _, cookie := range resp.Cookies() {
+			if cookie.Name == queuePassCookie {
+				t.SessionCookies[queuePassCookie] = cookie
+			}
+		}
+
 		var response meshWishlistMessage
 
 		err = json.NewDecoder(resp.Body).Decode(&response)
@@ -365,6 +371,12 @@ func (t *meshFrontendTask) GetWishlistID() (string, error) {
 			return "", errInQueue
 		}
 
+		for _, cookie := range resp.Cookies() {
+			if cookie.Name == queuePassCookie {
+				t.SessionCookies[queuePassCookie] = cookie
+			}
+		}
+
 		wishlistID, wishlistExists := doc.Find(fmt.Sprintf(`*[data-sku="%v%v"]`, t.SKU, t.Site.SKUSuffix)).Attr("data-wishlistid")
 
 		if wishlistExists {
@@ -418,6 +430,12 @@ func (t *meshFrontendTask) GetWishlist() (*meshFrontendWishlist, error) {
 			log.Printf("[WARN] Detected queue (Frontend - GetWishlist) - %v - %v", t.SKU, t.SiteCode)
 			t.HandleQueue(req.URL.String())
 			return nil, errInQueue
+		}
+
+		for _, cookie := range resp.Cookies() {
+			if cookie.Name == queuePassCookie {
+				t.SessionCookies[queuePassCookie] = cookie
+			}
 		}
 
 		var wishlist meshFrontendWishlist
