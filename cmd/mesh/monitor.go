@@ -286,7 +286,7 @@ func (t *meshFrontendTask) AddToWishlist() (*http.Cookie, error) {
 	case 200:
 		if t.DetectQueue(resp.Cookies()) {
 			log.Printf("[WARN] Detected queue (Frontend - AddToWishlist) - %v - %v", t.SKU, t.SiteCode)
-			t.HandleQueue(t.Site.SiteURL)
+			t.HandleQueue(req.URL.String())
 			return nil, errInQueue
 		}
 
@@ -367,7 +367,7 @@ func (t *meshFrontendTask) GetWishlistID() (string, error) {
 	case 200:
 		if t.DetectQueue(resp.Cookies()) {
 			log.Printf("[WARN] Detected queue (Frontend - GetWishlistID) - %v - %v", t.SKU, t.SiteCode)
-			t.HandleQueue(t.Site.SiteURL)
+			t.HandleQueue(req.URL.String())
 			return "", errInQueue
 		}
 
@@ -428,7 +428,7 @@ func (t *meshFrontendTask) GetWishlist() (*meshFrontendWishlist, error) {
 	case 200:
 		if t.DetectQueue(resp.Cookies()) {
 			log.Printf("[WARN] Detected queue (Frontend - GetWishlist) - %v - %v", t.SKU, t.SiteCode)
-			t.HandleQueue(t.Site.SiteURL)
+			t.HandleQueue(req.URL.String())
 			return nil, errInQueue
 		}
 
@@ -481,7 +481,7 @@ func (t *meshFrontendTask) HandleQueue(queueURL string) {
 }
 
 func (t *meshFrontendTask) QueueBrute(queueURL string) (*http.Cookie, error) {
-	req, err := http.NewRequest(http.MethodGet, queueURL, nil)
+	req, err := http.NewRequest(http.MethodHead, queueURL, nil)
 
 	if err != nil {
 		return nil, err
