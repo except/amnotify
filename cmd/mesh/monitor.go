@@ -286,7 +286,7 @@ func (t *meshFrontendTask) AddToWishlist() (*http.Cookie, error) {
 	case 200:
 		if t.DetectQueue(resp.Cookies()) {
 			log.Printf("[WARN] Detected queue (Frontend - AddToWishlist) - %v - %v", t.SKU, t.SiteCode)
-			t.HandleQueue(req.URL.String())
+			t.HandleQueue(t.Site.SiteURL)
 			return nil, errInQueue
 		}
 
@@ -367,7 +367,7 @@ func (t *meshFrontendTask) GetWishlistID() (string, error) {
 	case 200:
 		if t.DetectQueue(resp.Cookies()) {
 			log.Printf("[WARN] Detected queue (Frontend - GetWishlistID) - %v - %v", t.SKU, t.SiteCode)
-			t.HandleQueue(req.URL.String())
+			t.HandleQueue(t.Site.SiteURL)
 			return "", errInQueue
 		}
 
@@ -428,7 +428,7 @@ func (t *meshFrontendTask) GetWishlist() (*meshFrontendWishlist, error) {
 	case 200:
 		if t.DetectQueue(resp.Cookies()) {
 			log.Printf("[WARN] Detected queue (Frontend - GetWishlist) - %v - %v", t.SKU, t.SiteCode)
-			t.HandleQueue(req.URL.String())
+			t.HandleQueue(t.Site.SiteURL)
 			return nil, errInQueue
 		}
 
@@ -481,13 +481,7 @@ func (t *meshFrontendTask) HandleQueue(queueURL string) {
 }
 
 func (t *meshFrontendTask) QueueBrute(queueURL string) (*http.Cookie, error) {
-	bruteClient := new(http.Client)
-
-	bruteClient.Timeout = 15 * time.Second
-
-	bruteClient.Transport = t.Client.Transport
-
-	req, err := http.NewRequest(http.MethodHead, queueURL, nil)
+	req, err := http.NewRequest(http.MethodGet, queueURL, nil)
 
 	if err != nil {
 		return nil, err
@@ -500,7 +494,7 @@ func (t *meshFrontendTask) QueueBrute(queueURL string) (*http.Cookie, error) {
 	req.Header.Set("Accept-Language", "en-GB,en-US;q=0.9,en;q=0.8")
 	req.Header.Set("Cache-Control", "no-cache")
 
-	resp, err := bruteClient.Do(req)
+	resp, err := t.Client.Do(req)
 
 	if err != nil {
 		return nil, err
