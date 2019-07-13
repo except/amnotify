@@ -284,9 +284,10 @@ func (t *meshFrontendTask) AddToWishlist() (*http.Cookie, error) {
 
 	switch resp.StatusCode {
 	case 200:
-		if t.DetectQueue(resp.Cookies()) {
+		queueToken := t.DetectQueue(resp.Cookies())
+		if queueToken != nil {
 			log.Printf("[WARN] Detected queue (Frontend - AddToWishlist) - %v - %v", t.SKU, t.SiteCode)
-			t.HandleQueue(req.URL.String())
+			t.HandleQueue(req.URL.String(), queueToken)
 			return nil, errInQueue
 		}
 
@@ -365,9 +366,10 @@ func (t *meshFrontendTask) GetWishlistID() (string, error) {
 
 	switch resp.StatusCode {
 	case 200:
-		if t.DetectQueue(resp.Cookies()) {
+		queueToken := t.DetectQueue(resp.Cookies())
+		if queueToken != nil {
 			log.Printf("[WARN] Detected queue (Frontend - GetWishlistID) - %v - %v", t.SKU, t.SiteCode)
-			t.HandleQueue(req.URL.String())
+			t.HandleQueue(req.URL.String(), queueToken)
 			return "", errInQueue
 		}
 
@@ -426,9 +428,10 @@ func (t *meshFrontendTask) GetWishlist() (*meshFrontendWishlist, error) {
 
 	switch resp.StatusCode {
 	case 200:
-		if t.DetectQueue(resp.Cookies()) {
+		queueToken := t.DetectQueue(resp.Cookies())
+		if queueToken != nil {
 			log.Printf("[WARN] Detected queue (Frontend - GetWishlist) - %v - %v", t.SKU, t.SiteCode)
-			t.HandleQueue(req.URL.String())
+			t.HandleQueue(req.URL.String(), queueToken)
 			return nil, errInQueue
 		}
 
@@ -453,18 +456,18 @@ func (t *meshFrontendTask) GetWishlist() (*meshFrontendWishlist, error) {
 	}
 }
 
-func (t *meshFrontendTask) DetectQueue(cookies []*http.Cookie) bool {
+func (t *meshFrontendTask) DetectQueue(cookies []*http.Cookie) *http.Cookie {
 	for _, cookie := range cookies {
 		if cookie.Name == queueCookie {
-			return true
+			return cookie
 		}
 	}
 
-	return false
+	return nil
 }
 
-func (t *meshFrontendTask) HandleQueue(queueURL string) {
-	queuePass, err := t.QueueBrute(queueURL)
+func (t *meshFrontendTask) HandleQueue(queueURL string, queueToken *http.Cookie) {
+	queuePass, queueToken, err := t.QueueHandler(queueURL, queueToken)
 
 	if err != nil {
 		log.Printf("Error (Frontend - Queue Bruter) - %v - %v", t.SKU, err.Error())
@@ -477,15 +480,17 @@ func (t *meshFrontendTask) HandleQueue(queueURL string) {
 		return
 	}
 
-	t.HandleQueue(queueURL)
+	t.HandleQueue(queueURL, queueToken)
 }
 
-func (t *meshFrontendTask) QueueBrute(queueURL string) (*http.Cookie, error) {
+func (t *meshFrontendTask) QueueHandler(queueURL string, queueToken *http.Cookie) (*http.Cookie, *http.Cookie, error) {
 	req, err := http.NewRequest(http.MethodHead, queueURL, nil)
 
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
+
+	t.Client.Jar = nil
 
 	req.Header.Set("Pragma", "no-cache")
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36")
@@ -494,28 +499,33 @@ func (t *meshFrontendTask) QueueBrute(queueURL string) (*http.Cookie, error) {
 	req.Header.Set("Accept-Language", "en-GB,en-US;q=0.9,en;q=0.8")
 	req.Header.Set("Cache-Control", "no-cache")
 
+	if queueToken != nil {
+		req.Header.Set("Cookie", fmt.Sprintf("%v=%v", queueToken.Name, queueToken.Value))
+	}
+
 	resp, err := t.Client.Do(req)
 
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	defer resp.Body.Close()
 
 	switch resp.StatusCode {
 	case 200:
-		if !t.DetectQueue(resp.Cookies()) {
-			for _, cookie := range resp.Cookies() {
-				if cookie.Name == queuePassCookie {
-					return cookie, nil
-				}
+		for _, cookie := range resp.Cookies() {
+			if cookie.Name == queuePassCookie {
+				return cookie, nil, nil
 			}
 		}
-		return nil, nil
+
+		log.Printf("[INFO] Still in queue (Frontend) - %v - %v - %v", queueToken.Value, t.SKU, t.SiteCode)
+		time.Sleep(8 * time.Second)
+		return nil, queueToken, nil
 	case 403:
-		return nil, errTaskBanned
+		return nil, nil, errTaskBanned
 	default:
-		return nil, fmt.Errorf("Invalid status code (Frontend - Queue Brute) - %v - %v", t.SKU, t.SiteCode)
+		return nil, nil, fmt.Errorf("Invalid status code (Frontend - Queue Brute) - %v - %v", t.SKU, t.SiteCode)
 	}
 }
 
