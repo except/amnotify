@@ -2,6 +2,12 @@ package main
 
 import "net/http"
 
+type endConfig struct {
+	ProductSKUs []string `json:"ProductSKUs"`
+	Proxies     []string `json:"Proxies"`
+	WebhookUrls []string `json:"WebhookUrls"`
+}
+
 type endProdInfo struct {
 	Name, ProductURL, Price, ImageURL string
 }
@@ -36,4 +42,32 @@ type endProduct struct {
 			InStock bool   `json:"in_stock"`
 		} `json:"values"`
 	} `json:"options"`
+}
+
+type discordWebhook struct {
+	Embeds []discordEmbed `json:"embeds"`
+}
+
+type discordEmbed struct {
+	Title     string                `json:"title"`
+	URL       string                `json:"url"`
+	Color     int                   `json:"color"`
+	Footer    discordEmbedFooter    `json:"footer"`
+	Thumbnail discordEmbedThumbnail `json:"thumbnail"`
+	Fields    []discordEmbedField   `json:"fields"`
+}
+
+type discordEmbedFooter struct {
+	IconURL string `json:"icon_url"`
+	Text    string `json:"text"`
+}
+
+type discordEmbedThumbnail struct {
+	URL string `json:"url"`
+}
+
+type discordEmbedField struct {
+	Name   string `json:"name"`
+	Value  string `json:"value"`
+	Inline bool   `json:"inline"`
 }
