@@ -480,6 +480,7 @@ func (t *meshFrontendTask) HandleQueue(queueURL string, queueToken *http.Cookie)
 		return
 	}
 
+	time.Sleep(10 * time.Second)
 	t.HandleQueue(queueURL, queueToken)
 }
 
@@ -520,7 +521,6 @@ func (t *meshFrontendTask) QueueHandler(queueURL string, queueToken *http.Cookie
 		}
 
 		log.Printf("[INFO] Still in queue (Frontend) - %v - %v - %v", queueToken.Value, t.SKU, t.SiteCode)
-		time.Sleep(8 * time.Second)
 		return nil, queueToken, nil
 	case 403:
 		return nil, nil, errTaskBanned
