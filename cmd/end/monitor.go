@@ -9,6 +9,8 @@ import (
 	"math/rand"
 	"net/http"
 	"net/url"
+	"sort"
+	"strconv"
 	"strings"
 	"time"
 
@@ -36,38 +38,38 @@ func (t *endTask) Monitor() {
 			switch err {
 			case errProductOOS:
 				log.Printf("[INFO] Product is out of stock, retrying - %v", t.ProductSKU)
-				time.Sleep(750 * time.Millisecond)
+				time.Sleep(1500 * time.Millisecond)
 				continue
 			case errProductNoSizes:
 				log.Printf("[INFO] Product has no available sizes, retrying - %v", t.ProductSKU)
-				time.Sleep(750 * time.Millisecond)
+				time.Sleep(1500 * time.Millisecond)
 				continue
 			case errProductNotLoaded:
 				log.Printf("[INFO] Product is not loaded, retrying - %v", t.ProductSKU)
-				time.Sleep(1000 * time.Millisecond)
+				time.Sleep(1500 * time.Millisecond)
 				continue
 			case errTaskBanned:
 				log.Printf("[WARN] Task is banned, retrying - %v", t.ProductSKU)
 				t.SetProxy()
-				time.Sleep(1000 * time.Millisecond)
+				time.Sleep(2500 * time.Millisecond)
 				continue
 			default:
 				log.Printf("[ERROR] Unhandled Error - %v - %v", err.Error(), t.ProductSKU)
 				t.SetProxy()
-				time.Sleep(1500 * time.Millisecond)
+				time.Sleep(2500 * time.Millisecond)
 				continue
 			}
 		}
 
 		if len(sizeMap) == 0 {
 			log.Printf("[INFO] Size map for product is empty, retrying - %v", t.ProductSKU)
-			time.Sleep(750 * time.Millisecond)
+			time.Sleep(1500 * time.Millisecond)
 			continue
 		}
 
 		log.Printf("[INFO] Gathered size map - %v", t.ProductSKU)
 		t.CheckUpdate(sizeMap)
-		time.Sleep(750 * time.Millisecond)
+		time.Sleep(1500 * time.Millisecond)
 	}
 }
 
@@ -94,7 +96,7 @@ func (t *endTask) SetProxy() {
 }
 
 func (t *endTask) GetSizes() (map[string]bool, error) {
-	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("https://admin2.endclothing.com/gb/rest/V1/end/products/sku/%v?/%v=%v", t.ProductSKU, uniuri.NewLen(8), uniuri.NewLen(8)), nil)
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("https://www.endclothing.com/gb/rest/V1/end/products/sku/%v?/%v=%v", t.ProductSKU, uniuri.NewLen(16), uniuri.NewLen(16)), nil)
 
 	if err != nil {
 		return nil, err
@@ -220,17 +222,30 @@ func (t *endTask) SendUpdate(webhookURL string) {
 		Inline: true,
 	})
 
-	var availableSizes []string
+	var sizeFloats []float64
+	var sortedSizes []string
 
 	for size, sizeAvail := range t.SizeMap {
 		if sizeAvail {
-			availableSizes = append(availableSizes, size)
+			sizeFloat, err := strconv.ParseFloat(strings.Replace(size, "UK ", "", -1), 64)
+			if err != nil {
+				fmt.Println(err)
+				continue
+			}
+
+			sizeFloats = append(sizeFloats, sizeFloat)
 		}
+	}
+
+	sort.Float64s(sizeFloats)
+
+	for _, sizeFloat := range sizeFloats {
+		sortedSizes = append(sortedSizes, fmt.Sprintf("UK %g", sizeFloat))
 	}
 
 	webhookEmbed.Fields = append(webhookEmbed.Fields, discordEmbedField{
 		Name:   "Size Availability",
-		Value:  strings.Join(availableSizes, ", "),
+		Value:  strings.Join(sortedSizes, "\n"),
 		Inline: false,
 	})
 

@@ -6,10 +6,12 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"sync"
 	"time"
 )
 
 var (
+	wg     sync.WaitGroup
 	config endConfig
 
 	client = &http.Client{
@@ -46,7 +48,16 @@ func init() {
 }
 
 func main() {
+	for _, productSKU := range config.ProductSKUs {
+		wg.Add(1)
 
+		go func(productSKU string) {
+			defer wg.Done()
+
+			createTask(productSKU).Monitor()
+		}(productSKU)
+	}
+	wg.Wait()
 }
 
 func createTask(productSKU string) *endTask {
