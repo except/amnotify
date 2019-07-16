@@ -33,7 +33,10 @@ func (t *endTask) Monitor() {
 		sizeMap, err := t.GetSizes()
 
 		if err != nil {
-			t.FirstRun = false
+
+			if t.FirstRun {
+				t.FirstRun = false
+			}
 
 			switch err {
 			case errProductOOS:
