@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -8,6 +9,7 @@ import (
 	"math/rand"
 	"net/http"
 	"net/url"
+	"strings"
 	"time"
 
 	"github.com/dchest/uniuri"
@@ -29,6 +31,8 @@ func (t *endTask) Monitor() {
 		sizeMap, err := t.GetSizes()
 
 		if err != nil {
+			t.FirstRun = false
+
 			switch err {
 			case errProductOOS:
 				log.Printf("[INFO] Product is out of stock, retrying - %v", t.ProductSKU)
@@ -61,6 +65,9 @@ func (t *endTask) Monitor() {
 			continue
 		}
 
+		log.Printf("[INFO] Gathered size map - %v", t.ProductSKU)
+		t.CheckUpdate(sizeMap)
+		time.Sleep(750 * time.Millisecond)
 	}
 }
 
@@ -93,6 +100,12 @@ func (t *endTask) GetSizes() (map[string]bool, error) {
 		return nil, err
 	}
 
+	req.Header.Set("Pragma", "no-cache")
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36")
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Accept-Language", "en-GB,en-US;q=0.9,en;q=0.8")
+	req.Header.Set("Cache-Control", "no-cache")
+
 	resp, err := t.Client.Do(req)
 
 	if err != nil {
@@ -110,7 +123,7 @@ func (t *endTask) GetSizes() (map[string]bool, error) {
 			return nil, err
 		}
 
-		if t.ProductInfo != nil {
+		if t.ProductInfo == nil {
 			prodInfo := &endProdInfo{
 				Name:       product.Name,
 				ProductURL: product.Link,
@@ -155,5 +168,111 @@ func (t *endTask) GetSizes() (map[string]bool, error) {
 }
 
 func (t *endTask) CheckUpdate(sizeMap map[string]bool) {
+	updateAvailable := false
+	for size, stockAvailable := range sizeMap {
+		if sizeInstock, sizeExists := t.SizeMap[size]; sizeExists {
+			if !sizeInstock && stockAvailable {
+				updateAvailable = true
+			}
+		} else if stockAvailable {
+			updateAvailable = true
+		}
 
+		t.SizeMap[size] = stockAvailable
+	}
+
+	if updateAvailable {
+		if t.FirstRun {
+			log.Printf("[INFO] Ignoring first run update - %v", t.ProductSKU)
+		} else {
+			log.Printf("[INFO] Update available - %v", t.ProductSKU)
+			for _, webhookURL := range config.WebhookUrls {
+				go t.SendUpdate(webhookURL)
+			}
+		}
+	} else {
+		log.Printf("[INFO] No update available - %v", t.ProductSKU)
+	}
+}
+
+func (t *endTask) SendUpdate(webhookURL string) {
+	webhook := &discordWebhook{}
+
+	webhookEmbed := discordEmbed{
+		Title: t.ProductInfo.Name,
+		URL:   fmt.Sprintf("%v?/%v=%v", t.ProductInfo.ProductURL, uniuri.NewLen(4), uniuri.NewLen(4)),
+		Color: 16721733,
+	}
+
+	webhookEmbed.Thumbnail = discordEmbedThumbnail{
+		URL: t.ProductInfo.ImageURL,
+	}
+
+	webhookEmbed.Fields = append(webhookEmbed.Fields, discordEmbedField{
+		Name:   "Price",
+		Value:  t.ProductInfo.Price,
+		Inline: true,
+	})
+
+	webhookEmbed.Fields = append(webhookEmbed.Fields, discordEmbedField{
+		Name:   "Product SKU",
+		Value:  strings.ToUpper(t.ProductSKU),
+		Inline: true,
+	})
+
+	var availableSizes []string
+
+	for size, sizeAvail := range t.SizeMap {
+		if sizeAvail {
+			availableSizes = append(availableSizes, size)
+		}
+	}
+
+	webhookEmbed.Fields = append(webhookEmbed.Fields, discordEmbedField{
+		Name:   "Size Availability",
+		Value:  strings.Join(availableSizes, ", "),
+		Inline: false,
+	})
+
+	webhookEmbed.Footer = discordEmbedFooter{
+		Text:    fmt.Sprintf("AMNotify | END • %v", time.Now().Format("15:04:05.000")),
+		IconURL: "https://i.imgur.com/vv2dyGR.png",
+	}
+
+	webhook.Embeds = append(webhook.Embeds, webhookEmbed)
+
+	webhookPayload, err := json.Marshal(webhook)
+
+	if err != nil {
+		log.Printf("[ERROR] [WEBHOOK] %v - %v", t.ProductSKU, err.Error())
+		return
+	}
+
+	req, err := http.NewRequest(http.MethodPost, webhookURL, bytes.NewBuffer(webhookPayload))
+
+	if err != nil {
+		log.Printf("[ERROR] [WEBHOOK] %v - %v", t.ProductSKU, err.Error())
+		return
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := client.Do(req)
+
+	if err != nil {
+		log.Printf("[ERROR] [WEBHOOK] %v - %v", t.ProductSKU, err.Error())
+		return
+	}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode == 204 {
+		log.Printf("[SUCCESS] Webhook sent - %v", t.ProductSKU)
+	} else if resp.StatusCode == 429 {
+		log.Printf("[WARN] Retrying, webhook ratelimit - %v", t.ProductSKU)
+		time.Sleep(5 * time.Second)
+		t.SendUpdate(webhookURL)
+	} else {
+		log.Printf("[WARN] Invalid Status - %v - %v", t.ProductSKU, resp.Status)
+	}
 }

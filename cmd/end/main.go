@@ -11,6 +11,10 @@ import (
 
 var (
 	config endConfig
+
+	client = &http.Client{
+		Timeout: 20 * time.Second,
+	}
 )
 
 func init() {
