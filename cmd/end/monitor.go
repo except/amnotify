@@ -182,9 +182,9 @@ func (t *endTask) CheckUpdate(sizeMap map[string]bool) {
 		} else if stockAvailable {
 			updateAvailable = true
 		}
-
-		t.SizeMap[size] = stockAvailable
 	}
+
+	t.SizeMap = sizeMap
 
 	if updateAvailable {
 		if t.FirstRun {
