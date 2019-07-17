@@ -1,7 +1,7 @@
 {
     "FP_UK": {
         "SiteName": "Footpatrol",
-        "SiteUrl": "https://www.footpatrol.com",
+        "SiteUrl": "https://m.footpatrol.com",
         "UserAgent": "footpatrolgb/6.3.2.1446 (iphone-app; iOS 12.3.1)",
         "StoreCode": "footpatrolgb",
         "APIKey": "52F096E285134DF2A9E1AFAF979BB415",
@@ -14,7 +14,7 @@
     },
     "FP_FR": {
         "SiteName": "Footpatrol FR",
-        "SiteUrl": "https://www.footpatrol.fr",
+        "SiteUrl": "https://m.footpatrol.fr",
         "UserAgent": "footpatrolfr/6.3.2.1446 (iphone-app; iOS 12.3.1)",
         "StoreCode": "footpatrolfr",
         "APIKey": "536AE78F060D458F8342241C6A2A7190",
@@ -27,7 +27,7 @@
     },
     "HP_UK": {
         "SiteName": "The Hip Store",
-        "SiteUrl": "https://www.thehipstore.co.uk",
+        "SiteUrl": "https://m.thehipstore.co.uk",
         "UserAgent": "thehipstore/6.2.0.1348 (iphone-app; iOS 12.3.1)",
         "StoreCode": "thehipstore",
         "APIKey": "244343803EAA4F10AE31BEEB10ECF5B8",
@@ -40,7 +40,7 @@
     },
     "SZ_UK": {
         "SiteName": "size?",
-        "SiteUrl": "https://www.size.co.uk",
+        "SiteUrl": "https://m.size.co.uk",
         "UserAgent": "size/6.3.2.1443 (iphone-app; iOS 12.3.1)",
         "StoreCode": "size",
         "APIKey": "9039BF1C29724461881ACD80232F5313",
@@ -53,7 +53,7 @@
     },
     "SZ_DE": {
         "SiteName": "size? DE",
-        "SiteUrl": "https://www.sizeofficial.de",
+        "SiteUrl": "https://m.sizeofficial.de",
         "UserAgent": "sizede/6.3.2.1443 (iphone-app; iOS 12.3.1)",
         "StoreCode": "sizede",
         "APIKey": "B9AB7B6B5CD74497A4C2348F5F5E89F7",
@@ -66,7 +66,7 @@
     },
     "SZ_DK": {
         "SiteName": "size? DK",
-        "SiteUrl": "https://www.sizeofficial.dk",
+        "SiteUrl": "https://m.sizeofficial.dk",
         "UserAgent": "sizedk/6.3.2.1443 (iphone-app; iOS 12.3.1)",
         "StoreCode": "sizedk",
         "APIKey": "4E728C6150EE4396A8BACB0DD627DA2F",
@@ -79,7 +79,7 @@
     },
     "SZ_ES": {
         "SiteName": "size? ES",
-        "SiteUrl": "hhttps://www.sizeofficial.es",
+        "SiteUrl": "hhttps://m.sizeofficial.es",
         "UserAgent": "sizees/6.3.2.1443 (iphone-app; iOS 12.3.1)",
         "StoreCode": "sizes",
         "APIKey": "907108D8F6754F588927ED81B37D2E05",
@@ -92,7 +92,7 @@
     },
     "SZ_FR": {
         "SiteName": "size? FR",
-        "SiteUrl": "https://www.sizeofficial.fr",
+        "SiteUrl": "https://m.sizeofficial.fr",
         "UserAgent": "sizefr/6.3.2.1443 (iphone-app; iOS 12.3.1)",
         "StoreCode": "sizefr",
         "APIKey": "59DCF6F765D346619E3409F1F1FE7D10",
@@ -105,7 +105,7 @@
     },
     "SZ_IE": {
         "SiteName": "size? IE",
-        "SiteUrl": "https://www.sizeofficial.ie",
+        "SiteUrl": "https://m.sizeofficial.ie",
         "UserAgent": "sizeie/6.3.2.1443 (iphone-app; iOS 12.3.1)",
         "StoreCode": "sizeie",
         "APIKey": "4422119FE17E4F5B8E775B32673DDB64",
@@ -118,7 +118,7 @@
     },
     "SZ_IT": {
         "SiteName": "size? IT",
-        "SiteUrl": "https://www.sizeofficial.it",
+        "SiteUrl": "https://m.sizeofficial.it",
         "UserAgent": "sizeit/6.3.2.1443 (iphone-app; iOS 12.3.1)",
         "StoreCode": "sizeit",
         "APIKey": "D0C9A901F06A4C7AA00FAD92B0783C64",
@@ -131,7 +131,7 @@
     },
     "SZ_NL": {
         "SiteName": "size? NL",
-        "SiteUrl": "https://www.sizeofficial.nl",
+        "SiteUrl": "https://m.sizeofficial.nl",
         "UserAgent": "sizenl/6.3.2.1443 (iphone-app; iOS 12.3.1)",
         "StoreCode": "sizenl",
         "APIKey": "509EF36F9882470089AACAC99135B9CB",
@@ -144,7 +144,7 @@
     },
     "SZ_SE": {
         "SiteName": "size? SE",
-        "SiteUrl": "https://www.sizeofficial.nl",
+        "SiteUrl": "https://m.sizeofficial.nl",
         "UserAgent": "sizese/6.3.2.1443 (iphone-app; iOS 12.3.1)",
         "StoreCode": "sizese",
         "APIKey": "A99C7C5147414D58BFEBDC58D2DF9A95",
@@ -157,7 +157,7 @@
     },
     "JD_UK": {
         "SiteName": "JDSports",
-        "SiteUrl": "https://www.jdsports.co.uk",
+        "SiteUrl": "https://m.jdsports.co.uk",
         "UserAgent": "jdsportsuk/6.3.5.1503 (iphone-app; iOS 12.3.1)",
         "StoreCode": "jdsportsuk",
         "APIKey": "4CE1177BB983470AB15E703EC95E5285",
@@ -170,7 +170,7 @@
     },
     "JD_BE": {
         "SiteName": "JDSports BE",
-        "SiteUrl": "https://www.jdsports.be",
+        "SiteUrl": "https://m.jdsports.be",
         "UserAgent": "jdsportsbe/6.3.5.1503 (iphone-app; iOS 12.3.1)",
         "StoreCode": "jdsportsbe",
         "APIKey": "61100D5FA36F4F248D5DE6D546D47921",
@@ -183,7 +183,7 @@
     },
     "JD_DE": {
         "SiteName": "JDSports DE",
-        "SiteUrl": "https://www.jdsports.de",
+        "SiteUrl": "https://m.jdsports.de",
         "UserAgent": "jdsportsde/6.3.5.1503 (iphone-app; iOS 12.3.1)",
         "StoreCode": "jdsportsde",
         "APIKey": "195F25A2910341CBA49535BC5941F445",
@@ -196,7 +196,7 @@
     },
     "JD_DK": {
         "SiteName": "JDSports DK",
-        "SiteUrl": "https://www.jdsports.dk",
+        "SiteUrl": "https://m.jdsports.dk",
         "UserAgent": "jdsportsdk/6.3.5.1503 (iphone-app; iOS 12.3.1)",
         "StoreCode": "jdsportsdk",
         "APIKey": "00B2CE710BD64AC2AD7A34FEB2A7B296",
@@ -209,7 +209,7 @@
     },
     "JD_ES": {
         "SiteName": "JDSports ES",
-        "SiteUrl": "https://www.jdsports.es",
+        "SiteUrl": "https://m.jdsports.es",
         "UserAgent": "jdsportses/6.3.5.1503 (iphone-app; iOS 12.3.1)",
         "StoreCode": "jdsportses",
         "APIKey": "EB396335754A48D795BB903B49E3AD91",
@@ -222,7 +222,7 @@
     },
     "JD_FR": {
         "SiteName": "JDSports FR",
-        "SiteUrl": "https://www.jdsports.fr",
+        "SiteUrl": "https://m.jdsports.fr",
         "UserAgent": "jdsportsfr/6.3.5.1503 (iphone-app; iOS 12.3.1)",
         "StoreCode": "jdsportsfr",
         "APIKey": "B3B51B56ADC34016A6FEF7F8C337B836",
@@ -235,7 +235,7 @@
     },
     "JD_IE": {
         "SiteName": "JDSports IE",
-        "SiteUrl": "https://www.jdsports.ie",
+        "SiteUrl": "https://m.jdsports.ie",
         "UserAgent": "jdsportsie/6.3.5.1503 (iphone-app; iOS 12.3.1)",
         "StoreCode": "jdsportsie",
         "APIKey": "451FE27E0BD544C4B07C395CD5888547",
@@ -248,7 +248,7 @@
     },
     "JD_IT": {
         "SiteName": "JDSports IT",
-        "SiteUrl": "https://www.jdsports.it",
+        "SiteUrl": "https://m.jdsports.it",
         "UserAgent": "jdsportsit/6.3.5.1503 (iphone-app; iOS 12.3.1)",
         "StoreCode": "jdsportsit",
         "APIKey": "7B6B83F76BAA41DDB90D4147FB3D3C63",
@@ -261,7 +261,7 @@
     },
     "JD_MY": {
         "SiteName": "JDSports MY",
-        "SiteUrl": "https://www.jdsports.my",
+        "SiteUrl": "https://m.jdsports.my",
         "UserAgent": "jdsportsmyf/6.3.5.1503 (iphone-app; iOS 12.3.1)",
         "StoreCode": "jdsportsmyf",
         "APIKey": "031F193F1FF7401E96D29BA8072F7251",
@@ -274,7 +274,7 @@
     },
     "JD_NL": {
         "SiteName": "JDSports NL",
-        "SiteUrl": "https://www.jdsports.nl",
+        "SiteUrl": "https://m.jdsports.nl",
         "UserAgent": "jdsportsnl/6.3.5.1503 (iphone-app; iOS 12.3.1)",
         "StoreCode": "jdsportsnl",
         "APIKey": "9D93C082EA864FF5884FD4763B856C6D",
@@ -287,7 +287,7 @@
     },
     "JD_SE": {
         "SiteName": "JDSports SE",
-        "SiteUrl": "https://www.jdsports.se",
+        "SiteUrl": "https://m.jdsports.se",
         "UserAgent": "jdsportsse/6.3.5.1503 (iphone-app; iOS 12.3.1)",
         "StoreCode": "jdsportsse",
         "APIKey": "69A3F58BA52C4DB88CB5585707A3C0F4",
@@ -300,9 +300,9 @@
     },
     "JD_AU": {
         "SiteName": "JDSports AU",
-        "SiteUrl": "https://www.jd-sports.com.au",
-        "UserAgent": "jdsportsau/6.3.5.1503 (iphone-app; iOS 12.3.1)",
-        "StoreCode": "jdsportsau",
+        "SiteUrl": "https://m.jd-sports.com.au",
+        "UserAgent": "jdsportsauf/6.3.5.1503 (iphone-app; iOS 12.3.1)",
+        "StoreCode": "jdsportsauf",
         "APIKey": "1753F69D6B4F48F9956DEE1002A83491",
         "HawkID": "60122c4543",
         "HawkSecret": "066268d08e45b34290f553f9f4e56906",
