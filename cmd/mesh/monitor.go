@@ -677,7 +677,3 @@ func (t *meshFrontendTask) SendUpdate(webhookURL string) {
 
 	return
 }
-
-func (t *meshBackendTask) Monitor() {
-
-}

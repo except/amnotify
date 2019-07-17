@@ -93,14 +93,6 @@ func main() {
 					task.Monitor()
 				}
 			}(task.SKU, regionCode)
-
-			// go func(SKU, regionCode string) {
-			// 	defer wg.Done()
-			// 	task := createBackendTask(SKU, regionCode)
-			// 	if task != nil {
-			// 		task.Monitor()
-			// 	}
-			// }(task.SKU, regionCode)
 		}
 	}
 
@@ -159,23 +151,6 @@ func createFrontendTask(SKU, regionCode string) *meshFrontendTask {
 			SiteCode:       regionCode,
 			SessionCookies: make(map[string]*http.Cookie),
 			ProductSKUMap:  make(map[string]meshProductSKU),
-			Client: &http.Client{
-				Timeout: 15 * time.Second,
-			},
-		}
-	}
-
-	return nil
-}
-
-func createBackendTask(SKU, regionCode string) *meshBackendTask {
-	if site, siteExists := siteConfig[regionCode]; siteExists {
-		return &meshBackendTask{
-			SKU:           SKU,
-			FirstRun:      true,
-			Site:          site,
-			SiteCode:      regionCode,
-			ProductSKUMap: make(map[string]meshProductSKU),
 			Client: &http.Client{
 				Timeout: 15 * time.Second,
 			},
