@@ -4,11 +4,11 @@ An in-house monitoring solution for AMNotify.
 ## Popular sites
 - [x] Footpatrol
   - [x] MESH `(JD Sports, size?, The Hip Store)`
-- [ ] Solebox `Full rewrite needed (PX3 API)`
+- [ ] Solebox `PerimeterX needed`
 - [ ] SNS
   - [ ] Panagora `(Naked, YME)`
 - [ ] BSTN
-- [ ] END.
+- [x] END.
 - [ ] SVD
 - [x] Footlocker
 
