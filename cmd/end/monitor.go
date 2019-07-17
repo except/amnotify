@@ -33,21 +33,25 @@ func (t *endTask) Monitor() {
 		sizeMap, err := t.GetSizes()
 
 		if err != nil {
-
-			if t.FirstRun {
-				t.FirstRun = false
-			}
-
 			switch err {
 			case errProductOOS:
+				if t.FirstRun {
+					t.FirstRun = false
+				}
 				log.Printf("[INFO] Product is out of stock, retrying - %v", t.ProductSKU)
 				time.Sleep(1500 * time.Millisecond)
 				continue
 			case errProductNoSizes:
+				if t.FirstRun {
+					t.FirstRun = false
+				}
 				log.Printf("[INFO] Product has no available sizes, retrying - %v", t.ProductSKU)
 				time.Sleep(1500 * time.Millisecond)
 				continue
 			case errProductNotLoaded:
+				if t.FirstRun {
+					t.FirstRun = false
+				}
 				log.Printf("[INFO] Product is not loaded, retrying - %v", t.ProductSKU)
 				time.Sleep(1500 * time.Millisecond)
 				continue
