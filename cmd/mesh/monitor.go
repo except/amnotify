@@ -266,12 +266,10 @@ func (t *meshFrontendTask) AddToWishlist() (*http.Cookie, error) {
 		return nil, err
 	}
 
-	req.Header.Set("Pragma", "no-cache")
-	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36")
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Accept", "*/*")
-	req.Header.Set("Accept-Language", "en-GB,en-US;q=0.9,en;q=0.8")
+	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+	req.Header.Set("Accept-Language", "en-gb")
 	req.Header.Set("Cache-Control", "no-cache")
+	req.Header.Set("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Mobile/15E148 Safari/604.1")
 	req.Header.Set("X-Requested-With", "XMLHttpRequest")
 
 	resp, err := t.Client.Do(req)
@@ -343,12 +341,10 @@ func (t *meshFrontendTask) GetWishlistID() (string, error) {
 		return "", err
 	}
 
-	req.Header.Set("Pragma", "no-cache")
-	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36")
-	req.Header.Set("Accept", "*/*")
-	req.Header.Set("Accept-Language", "en-GB,en-US;q=0.9,en;q=0.8")
+	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+	req.Header.Set("Accept-Language", "en-gb")
 	req.Header.Set("Cache-Control", "no-cache")
-	req.Header.Set("X-Requested-With", "XMLHttpRequest")
+	req.Header.Set("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Mobile/15E148 Safari/604.1")
 
 	resp, err := t.Client.Do(req)
 
@@ -379,12 +375,13 @@ func (t *meshFrontendTask) GetWishlistID() (string, error) {
 			}
 		}
 
-		wishlistID, wishlistExists := doc.Find(fmt.Sprintf(`*[data-sku="%v%v"]`, t.SKU, t.Site.SKUSuffix)).Attr("data-wishlistid")
+		wishlistID, wishlistExists := doc.Find(fmt.Sprintf(`a[data-sku="%v%v"]`, t.SKU, t.Site.SKUSuffix)).Attr("data-wishlistid")
 
 		if wishlistExists {
 			log.Printf("[INFO] Found Wishlist (Frontend) - %v - %v - %v", wishlistID, t.SKU, t.SiteCode)
 			return wishlistID, nil
 		}
+
 		log.Printf("[WARN] No Wishlist (Frontend) - %v - %v", t.SKU, t.SiteCode)
 		return "", nil
 	case 403:
@@ -411,11 +408,10 @@ func (t *meshFrontendTask) GetWishlist() (*meshFrontendWishlist, error) {
 		return nil, err
 	}
 
-	req.Header.Set("Pragma", "no-cache")
-	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36")
-	req.Header.Set("Accept", "*/*")
-	req.Header.Set("Accept-Language", "en-GB,en-US;q=0.9,en;q=0.8")
+	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+	req.Header.Set("Accept-Language", "en-gb")
 	req.Header.Set("Cache-Control", "no-cache")
+	req.Header.Set("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Mobile/15E148 Safari/604.1")
 	req.Header.Set("X-Requested-With", "XMLHttpRequest")
 
 	resp, err := t.Client.Do(req)
@@ -493,12 +489,11 @@ func (t *meshFrontendTask) QueueHandler(queueURL string, queueToken *http.Cookie
 
 	t.Client.Jar = nil
 
-	req.Header.Set("Pragma", "no-cache")
-	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36")
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Accept", "*/*")
-	req.Header.Set("Accept-Language", "en-GB,en-US;q=0.9,en;q=0.8")
+	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+	req.Header.Set("Accept-Language", "en-gb")
 	req.Header.Set("Cache-Control", "no-cache")
+	req.Header.Set("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Mobile/15E148 Safari/604.1")
+	req.Header.Set("X-Requested-With", "XMLHttpRequest")
 
 	if queueToken != nil {
 		req.Header.Set("Cookie", fmt.Sprintf("%v=%v", queueToken.Name, queueToken.Value))

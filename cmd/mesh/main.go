@@ -124,12 +124,10 @@ func testProxy(proxyStr string) {
 	}
 
 	req, err := http.NewRequest(http.MethodGet, siteConfig["FP_UK"].SiteURL, nil)
-	req.Header.Set("Pragma", "no-cache")
-	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36")
-	req.Header.Set("Accept", "*/*")
-	req.Header.Set("Accept-Language", "en-GB,en-US;q=0.9,en;q=0.8")
+	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+	req.Header.Set("Accept-Language", "en-gb")
 	req.Header.Set("Cache-Control", "no-cache")
-	req.Header.Set("X-Requested-With", "XMLHttpRequest")
+	req.Header.Set("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Mobile/15E148 Safari/604.1")
 
 	if err != nil {
 		log.Printf("[WARN] Proxy FAIL - %v", proxyStr)
