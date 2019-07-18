@@ -79,7 +79,7 @@
     },
     "SZ_ES": {
         "SiteName": "size? ES",
-        "SiteUrl": "hhttps://m.sizeofficial.es",
+        "SiteUrl": "https://m.sizeofficial.es",
         "UserAgent": "sizees/6.3.2.1443 (iphone-app; iOS 12.3.1)",
         "StoreCode": "sizes",
         "APIKey": "907108D8F6754F588927ED81B37D2E05",
