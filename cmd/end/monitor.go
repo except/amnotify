@@ -103,12 +103,13 @@ func (t *endTask) SetProxy() {
 }
 
 func (t *endTask) GetSizes() (map[string]bool, error) {
-	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("https://www.endclothing.com/gb/rest/V1/end/products/sku/%v?/%v=%v", t.ProductSKU, uniuri.NewLen(16), uniuri.NewLen(16)), nil)
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("https://distilnetworks.endservices.info/gb/rest/V1/end/products/sku/%v?/%v=%v", t.ProductSKU, uniuri.NewLen(16), uniuri.NewLen(16)), nil)
 
 	if err != nil {
 		return nil, err
 	}
 
+	req.Host = "www.endclothing.com"
 	req.Header.Set("Pragma", "no-cache")
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36")
 	req.Header.Set("Accept", "application/json")

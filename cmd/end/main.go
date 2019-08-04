@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/tls"
 	"encoding/json"
 	"io/ioutil"
 	"log"
@@ -67,6 +68,9 @@ func createTask(productSKU string) *endTask {
 		SizeMap:    make(map[string]bool),
 		Client: &http.Client{
 			Timeout: 15 * time.Second,
+			Transport: &http.Transport{
+				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+			},
 		},
 	}
 }
