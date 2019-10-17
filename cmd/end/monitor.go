@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"crypto/tls"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -111,7 +112,8 @@ func (t *endTask) SetProxy() {
 		}
 
 		t.Client.Transport = &http.Transport{
-			Proxy: http.ProxyURL(proxyURL),
+			Proxy:           http.ProxyURL(proxyURL),
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 		}
 
 		log.Printf("[INFO] Running Proxy (%v) - %v", proxyURL.String(), t.ProductSKU)
@@ -263,29 +265,29 @@ func (t *endTask) GetSizes() (map[string]bool, error) {
 		}
 	}
 
-	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("https://api2.endclothing.com/gb/rest/V1/end/products/sku/%v?/%v=%v", t.ProductSKU, uniuri.NewLen(16), uniuri.NewLen(16)), nil)
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("https://distilnetworks.endservices.info/gb/rest/V1/end/products/sku/%v?/%v=%v", t.ProductSKU, uniuri.NewLen(16), uniuri.NewLen(16)), nil)
 
 	if err != nil {
 		return nil, err
 	}
 
-	// req.Host = "api2.endclothing.com"
+	req.Host = "api2.endclothing.com"
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Accept-Language", "en-GB,en;q=0.5")
 	req.Header.Set("Connection", "keep-alive")
 	req.Header.Set("Referer", "https://www.endclothing.com/gb/")
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0")
 
-	// if t.Client.Jar != nil {
-	// 	cookies := t.Client.Jar.Cookies(siteURL)
-	// 	cookieArr := []string{}
+	if t.Client.Jar != nil {
+		cookies := t.Client.Jar.Cookies(siteURL)
+		cookieArr := []string{}
 
-	// 	for _, cookie := range cookies {
-	// 		cookieArr = append(cookieArr, fmt.Sprintf("%v=%v;", cookie.Name, cookie.Value))
-	// 	}
+		for _, cookie := range cookies {
+			cookieArr = append(cookieArr, fmt.Sprintf("%v=%v;", cookie.Name, cookie.Value))
+		}
 
-	// 	req.Header.Set("Cookie", strings.Join(cookieArr, ","))
-	// }
+		req.Header.Set("Cookie", strings.Join(cookieArr, ","))
+	}
 
 	resp, err := t.Client.Do(req)
 
