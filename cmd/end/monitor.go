@@ -38,7 +38,6 @@ func (t *endTask) Monitor() {
 	}
 
 	log.Printf("[INFO] Starting task - %v", t.ProductSKU)
-	t.SetProxy()
 
 	for {
 		sizeMap, err := t.GetSizes()
@@ -257,6 +256,7 @@ func (t *endTask) GetCookies() error {
 
 func (t *endTask) GetSizes() (map[string]bool, error) {
 	if t.RequestCount%25 == 0 || t.RequestCount == 0 {
+		t.SetProxy()
 		err := t.GetCookies()
 		if err != nil {
 			log.Printf("[ERROR] Unhandled Error (Challenge) - %v - %v", err.Error(), t.ProductSKU)
