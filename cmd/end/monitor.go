@@ -27,6 +27,7 @@ var (
 	errProductNoSizes   = errors.New("Product has no available sizes")
 	errProductNotLoaded = errors.New("Product not loaded")
 
+	errChallengeNoPath = errors.New("Failed to complete challenge - Path not found")
 	errChallengeFailed = errors.New("Failed to complete challenge")
 
 	siteURL, siteURLErr = url.Parse("https://api2.endclothing.com")
@@ -68,10 +69,10 @@ func (t *endTask) Monitor() {
 			case errTaskBanned:
 				log.Printf("[WARN] Task is banned, retrying - %v", t.ProductSKU)
 				t.SetProxy()
-
 				challengeErr := t.GetCookies()
 				if challengeErr == nil {
 					log.Printf("[INFO] Set Distil Cookies - %v", t.ProductSKU)
+					t.RequestCount = 1
 				} else {
 					log.Printf("[ERROR] Unhandled Error (Challenge) - %v - %v", challengeErr.Error(), t.ProductSKU)
 				}
@@ -81,6 +82,13 @@ func (t *endTask) Monitor() {
 			default:
 				log.Printf("[ERROR] Unhandled Error - %v - %v", err.Error(), t.ProductSKU)
 				t.SetProxy()
+				challengeErr := t.GetCookies()
+				if challengeErr == nil {
+					log.Printf("[INFO] Set Distil Cookies - %v", t.ProductSKU)
+					t.RequestCount = 1
+				} else {
+					log.Printf("[ERROR] Unhandled Error (Challenge) - %v - %v", challengeErr.Error(), t.ProductSKU)
+				}
 				time.Sleep(2500 * time.Millisecond)
 				continue
 			}
@@ -131,7 +139,7 @@ func (t *endTask) GetChallengeLocation() (string, error) {
 	req.Header.Set("Accept", "*/*")
 	req.Header.Set("Accept-Language", "en-GB,en;q=0.5")
 	req.Header.Set("Connection", "keep-alive")
-	req.Header.Set("Referer", "https://www.endclothing.com/gb/")
+	req.Header.Set("Referer", "https://www.endclothing.com")
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0")
 
 	resp, err := t.Client.Do(req)
@@ -154,10 +162,22 @@ func (t *endTask) GetChallengeLocation() (string, error) {
 			return val, nil
 		}
 
-		return "", errChallengeFailed
+		return "", errChallengeNoPath
+	case 405:
+		html, err := goquery.NewDocumentFromReader(resp.Body)
+
+		if err != nil {
+			return "", err
+		}
+
+		if val, ok := html.Find(`script[src^="/ecl"]`).Attr("src"); ok {
+			return val, nil
+		}
+
+		return "", errChallengeNoPath
 	}
 
-	return "", errChallengeFailed
+	return "", errChallengeNoPath
 }
 
 func (t *endTask) GetPayload() (string, error) {
@@ -412,7 +432,6 @@ func (t *endTask) SendUpdate(webhookURL string) {
 		if sizeAvail {
 			sizeFloat, err := strconv.ParseFloat(strings.Replace(size, "UK ", "", -1), 64)
 			if err != nil {
-				fmt.Println(err)
 				continue
 			}
 
