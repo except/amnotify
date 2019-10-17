@@ -35,6 +35,7 @@ type endProduct struct {
 	Name                string `json:"name"`
 	Link                string `json:"link"`
 	InStock             bool   `json:"in_stock"`
+	IsSalable           bool   `json:"is_salable"`
 	Price               int    `json:"price"`
 	MediaGalleryEntries []struct {
 		File string `json:"file"`

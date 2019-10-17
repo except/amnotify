@@ -342,7 +342,7 @@ func (t *endTask) GetSizes() (map[string]bool, error) {
 			t.ProductInfo = prodInfo
 		}
 
-		if product.InStock {
+		if product.InStock && product.IsSalable {
 			sizesAvailable := false
 			sizeMap := make(map[string]bool)
 			for _, sizeOption := range product.Options {
