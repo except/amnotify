@@ -8,6 +8,11 @@ type endConfig struct {
 	WebhookUrls []string `json:"WebhookUrls"`
 }
 
+type endPayload struct {
+	Success bool   `json:"success"`
+	Payload string `json:"payload"`
+}
+
 type endProdInfo struct {
 	Name, ProductURL, Price, ImageURL string
 }
@@ -15,7 +20,8 @@ type endProdInfo struct {
 type endTask struct {
 	ProductSKU string
 
-	FirstRun bool
+	FirstRun     bool
+	RequestCount int
 
 	Client      *http.Client
 	ProductInfo *endProdInfo

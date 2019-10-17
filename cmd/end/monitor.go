@@ -8,12 +8,14 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
+	"net/http/cookiejar"
 	"net/url"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/PuerkitoBio/goquery"
 	"github.com/dchest/uniuri"
 )
 
@@ -23,9 +25,17 @@ var (
 	errProductOOS       = errors.New("Product is out of stock")
 	errProductNoSizes   = errors.New("Product has no available sizes")
 	errProductNotLoaded = errors.New("Product not loaded")
+
+	errChallengeFailed = errors.New("Failed to complete challenge")
+
+	siteURL, siteURLErr = url.Parse("https://api2.endclothing.com")
 )
 
 func (t *endTask) Monitor() {
+	if siteURLErr != nil {
+		panic(siteURLErr)
+	}
+
 	log.Printf("[INFO] Starting task - %v", t.ProductSKU)
 	t.SetProxy()
 
@@ -39,25 +49,33 @@ func (t *endTask) Monitor() {
 					t.FirstRun = false
 				}
 				log.Printf("[INFO] Product is out of stock, retrying - %v", t.ProductSKU)
-				time.Sleep(1500 * time.Millisecond)
+				// time.Sleep(1500 * time.Millisecond)
 				continue
 			case errProductNoSizes:
 				if t.FirstRun {
 					t.FirstRun = false
 				}
 				log.Printf("[INFO] Product has no available sizes, retrying - %v", t.ProductSKU)
-				time.Sleep(1500 * time.Millisecond)
+				// time.Sleep(1500 * time.Millisecond)
 				continue
 			case errProductNotLoaded:
 				if t.FirstRun {
 					t.FirstRun = false
 				}
 				log.Printf("[INFO] Product is not loaded, retrying - %v", t.ProductSKU)
-				time.Sleep(1500 * time.Millisecond)
+				// time.Sleep(1500 * time.Millisecond)
 				continue
 			case errTaskBanned:
 				log.Printf("[WARN] Task is banned, retrying - %v", t.ProductSKU)
 				t.SetProxy()
+
+				challengeErr := t.GetCookies()
+				if challengeErr == nil {
+					log.Printf("[INFO] Set Distil Cookies - %v", t.ProductSKU)
+				} else {
+					log.Printf("[ERROR] Unhandled Error (Challenge) - %v - %v", challengeErr.Error(), t.ProductSKU)
+				}
+
 				time.Sleep(2500 * time.Millisecond)
 				continue
 			default:
@@ -70,13 +88,13 @@ func (t *endTask) Monitor() {
 
 		if len(sizeMap) == 0 {
 			log.Printf("[INFO] Size map for product is empty, retrying - %v", t.ProductSKU)
-			time.Sleep(1500 * time.Millisecond)
+			// time.Sleep(1500 * time.Millisecond)
 			continue
 		}
 
 		log.Printf("[INFO] Gathered size map - %v", t.ProductSKU)
 		t.CheckUpdate(sizeMap)
-		time.Sleep(1500 * time.Millisecond)
+		// time.Sleep(1500 * time.Millisecond)
 	}
 }
 
@@ -102,19 +120,172 @@ func (t *endTask) SetProxy() {
 	}
 }
 
+func (t *endTask) GetChallengeLocation() (string, error) {
+	req, err := http.NewRequest(http.MethodGet, "https://www.endclothing.com", nil)
+
+	if err != nil {
+		return "", err
+	}
+
+	req.Header.Set("Accept", "*/*")
+	req.Header.Set("Accept-Language", "en-GB,en;q=0.5")
+	req.Header.Set("Connection", "keep-alive")
+	req.Header.Set("Referer", "https://www.endclothing.com/gb/")
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0")
+
+	resp, err := t.Client.Do(req)
+
+	if err != nil {
+		return "", err
+	}
+
+	defer resp.Body.Close()
+
+	switch resp.StatusCode {
+	case 200:
+		html, err := goquery.NewDocumentFromReader(resp.Body)
+
+		if err != nil {
+			return "", err
+		}
+
+		if val, ok := html.Find(`script[src^="/ecl"]`).Attr("src"); ok {
+			return val, nil
+		}
+
+		return "", errChallengeFailed
+	}
+
+	return "", errChallengeFailed
+}
+
+func (t *endTask) GetPayload() (string, error) {
+	req, err := http.NewRequest(http.MethodGet, "http://thesoleservice.c9ext2p5vs.eu-west-2.elasticbeanstalk.com/generate", nil)
+
+	if err != nil {
+		return "", err
+	}
+
+	req.Header.Set("X-Distil-API-Key", "ca333d0f-154c-42c8-ab0c-d480a0f77fa6")
+
+	resp, err := client.Do(req)
+
+	if err != nil {
+		return "", err
+	}
+
+	defer resp.Body.Close()
+
+	switch resp.StatusCode {
+	case 200:
+		var payloadResponse endPayload
+		err := json.NewDecoder(resp.Body).Decode(&payloadResponse)
+
+		if err != nil {
+			return "", err
+		}
+
+		if payloadResponse.Success {
+			return payloadResponse.Payload, nil
+		}
+	}
+
+	return "", errChallengeFailed
+}
+
+func (t *endTask) GetCookies() error {
+	t.Client.Jar = nil
+	challengePath, err := t.GetChallengeLocation()
+
+	if err != nil {
+		return err
+	}
+
+	payload, err := t.GetPayload()
+
+	if err != nil {
+		return err
+	}
+
+	form := url.Values{}
+
+	form.Add("p", payload)
+
+	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("https://www.endclothing.com%v", challengePath), strings.NewReader(form.Encode()))
+
+	if err != nil {
+		return err
+	}
+
+	req.Header.Set("Accept", "*/*")
+	req.Header.Set("Accept-Language", "en-GB,en;q=0.5")
+	req.Header.Set("Connection", "keep-alive")
+	req.Header.Set("Referer", "https://www.endclothing.com/gb/")
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0")
+
+	resp, err := t.Client.Do(req)
+
+	if err != nil {
+		return err
+	}
+
+	defer resp.Body.Close()
+
+	switch resp.StatusCode {
+	case 200:
+		cookies := resp.Cookies()
+
+		if len(cookies) > 0 {
+
+			jar, err := cookiejar.New(nil)
+
+			if err != nil {
+				return err
+			}
+
+			jar.SetCookies(siteURL, cookies)
+
+			t.Client.Jar = jar
+			return nil
+		}
+	}
+
+	return errChallengeFailed
+}
+
 func (t *endTask) GetSizes() (map[string]bool, error) {
-	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("https://distilnetworks.endservices.info/gb/rest/V1/end/products/sku/%v?/%v=%v", t.ProductSKU, uniuri.NewLen(16), uniuri.NewLen(16)), nil)
+	if t.RequestCount%25 == 0 || t.RequestCount == 0 {
+		err := t.GetCookies()
+		if err != nil {
+			log.Printf("[ERROR] Unhandled Error (Challenge) - %v - %v", err.Error(), t.ProductSKU)
+		} else {
+			log.Printf("[INFO] Set Distil Cookies - %v", t.ProductSKU)
+		}
+	}
+
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("https://api2.endclothing.com/gb/rest/V1/end/products/sku/%v?/%v=%v", t.ProductSKU, uniuri.NewLen(16), uniuri.NewLen(16)), nil)
 
 	if err != nil {
 		return nil, err
 	}
 
-	req.Host = "www.endclothing.com"
-	req.Header.Set("Pragma", "no-cache")
-	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36")
+	// req.Host = "api2.endclothing.com"
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Accept-Language", "en-GB,en-US;q=0.9,en;q=0.8")
-	req.Header.Set("Cache-Control", "no-cache")
+	req.Header.Set("Accept-Language", "en-GB,en;q=0.5")
+	req.Header.Set("Connection", "keep-alive")
+	req.Header.Set("Referer", "https://www.endclothing.com/gb/")
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0")
+
+	// if t.Client.Jar != nil {
+	// 	cookies := t.Client.Jar.Cookies(siteURL)
+	// 	cookieArr := []string{}
+
+	// 	for _, cookie := range cookies {
+	// 		cookieArr = append(cookieArr, fmt.Sprintf("%v=%v;", cookie.Name, cookie.Value))
+	// 	}
+
+	// 	req.Header.Set("Cookie", strings.Join(cookieArr, ","))
+	// }
 
 	resp, err := t.Client.Do(req)
 
@@ -123,6 +294,8 @@ func (t *endTask) GetSizes() (map[string]bool, error) {
 	}
 
 	defer resp.Body.Close()
+
+	t.RequestCount++
 
 	switch resp.StatusCode {
 	case 200:
