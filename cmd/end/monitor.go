@@ -181,7 +181,7 @@ func (t *endTask) GetChallengeLocation() (string, error) {
 }
 
 func (t *endTask) GetPayload() (string, error) {
-	req, err := http.NewRequest(http.MethodGet, "http://thesoleservice.c9ext2p5vs.eu-west-2.elasticbeanstalk.com/generate", nil)
+	req, err := http.NewRequest(http.MethodGet, "http://production.c9ext2p5vs.eu-west-2.elasticbeanstalk.com/generate", nil)
 
 	if err != nil {
 		return "", err
