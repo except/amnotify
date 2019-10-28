@@ -158,7 +158,7 @@ func (t *endTask) GetChallengeLocation() (string, error) {
 			return "", err
 		}
 
-		if val, ok := html.Find(`script[src^="/ecl"]`).Attr("src"); ok {
+		if val, ok := html.Find(`script[src^="/ec"]`).Attr("src"); ok {
 			return val, nil
 		}
 
@@ -170,7 +170,7 @@ func (t *endTask) GetChallengeLocation() (string, error) {
 			return "", err
 		}
 
-		if val, ok := html.Find(`script[src^="/ecl"]`).Attr("src"); ok {
+		if val, ok := html.Find(`script[src^="/ec"]`).Attr("src"); ok {
 			return val, nil
 		}
 
@@ -406,7 +406,7 @@ func (t *endTask) SendUpdate(webhookURL string) {
 	webhookEmbed := discordEmbed{
 		Title: t.ProductInfo.Name,
 		URL:   fmt.Sprintf("%v?/%v=%v", t.ProductInfo.ProductURL, uniuri.NewLen(4), uniuri.NewLen(4)),
-		Color: 16721733,
+		Color: 1,
 	}
 
 	webhookEmbed.Thumbnail = discordEmbedThumbnail{
@@ -452,8 +452,8 @@ func (t *endTask) SendUpdate(webhookURL string) {
 	})
 
 	webhookEmbed.Footer = discordEmbedFooter{
-		Text:    fmt.Sprintf("AMNotify | END • %v", time.Now().Format("15:04:05.000")),
-		IconURL: "https://i.imgur.com/vv2dyGR.png",
+		Text:    fmt.Sprintf("assist by @afraidlabs | END • %v", time.Now().Format("15:04:05.000")),
+		IconURL: "https://i.imgur.com/fOrEhkz.jpg",
 	}
 
 	webhook.Embeds = append(webhook.Embeds, webhookEmbed)
