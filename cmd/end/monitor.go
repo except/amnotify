@@ -171,7 +171,7 @@ func (t *endTask) GetPayload() (string, error) {
 		return "", err
 	}
 
-	req.Header.Set("X-Distil-API-Key", "ca333d0f-154c-42c8-ab0c-d480a0f77fa6")
+	req.Header.Set("X-Distil-API-Key", "6d9be079-d581-421f-a584-960b64dd652d")
 
 	resp, err := client.Do(req)
 
