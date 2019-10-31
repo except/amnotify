@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"math/rand"
 	"net/http"
@@ -160,12 +159,6 @@ func (t *endTask) GetChallengeLocation() (string, error) {
 
 	if val, ok := html.Find(`script[src^="/ec"]`).Attr("src"); ok {
 		return val, nil
-	} else {
-		respBody, _ := ioutil.ReadAll(resp.Body)
-		fmt.Println(string(respBody[:]))
-		fmt.Println(resp.Status)
-		panic(nil)
-
 	}
 
 	return "", errChallengeNoPath
