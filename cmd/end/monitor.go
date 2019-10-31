@@ -150,31 +150,14 @@ func (t *endTask) GetChallengeLocation() (string, error) {
 
 	defer resp.Body.Close()
 
-	switch resp.StatusCode {
-	case 200:
-		html, err := goquery.NewDocumentFromReader(resp.Body)
+	html, err := goquery.NewDocumentFromReader(resp.Body)
 
-		if err != nil {
-			return "", err
-		}
+	if err != nil {
+		return "", err
+	}
 
-		if val, ok := html.Find(`script[src^="/ec"]`).Attr("src"); ok {
-			return val, nil
-		}
-
-		return "", errChallengeNoPath
-	case 405:
-		html, err := goquery.NewDocumentFromReader(resp.Body)
-
-		if err != nil {
-			return "", err
-		}
-
-		if val, ok := html.Find(`script[src^="/ec"]`).Attr("src"); ok {
-			return val, nil
-		}
-
-		return "", errChallengeNoPath
+	if val, ok := html.Find(`script[src^="/ec"]`).Attr("src"); ok {
+		return val, nil
 	}
 
 	return "", errChallengeNoPath
