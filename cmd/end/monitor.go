@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"math/rand"
 	"net/http"
@@ -130,12 +131,13 @@ func (t *endTask) SetProxy() {
 }
 
 func (t *endTask) GetChallengeLocation() (string, error) {
-	req, err := http.NewRequest(http.MethodGet, "https://www.endclothing.com", nil)
+	req, err := http.NewRequest(http.MethodGet, "https://distilnetworks.endservices.info", nil)
 
 	if err != nil {
 		return "", err
 	}
 
+	req.Host = "www.endclothing.com"
 	req.Header.Set("Accept", "*/*")
 	req.Header.Set("Accept-Language", "en-GB,en;q=0.5")
 	req.Header.Set("Connection", "keep-alive")
@@ -158,6 +160,12 @@ func (t *endTask) GetChallengeLocation() (string, error) {
 
 	if val, ok := html.Find(`script[src^="/ec"]`).Attr("src"); ok {
 		return val, nil
+	} else {
+		respBody, _ := ioutil.ReadAll(resp.Body)
+		fmt.Println(string(respBody[:]))
+		fmt.Println(resp.Status)
+		panic(nil)
+
 	}
 
 	return "", errChallengeNoPath
@@ -215,12 +223,13 @@ func (t *endTask) GetCookies() error {
 
 	form.Add("p", payload)
 
-	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("https://www.endclothing.com%v", challengePath), strings.NewReader(form.Encode()))
+	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("https://distilnetworks.endservices.info%v", challengePath), strings.NewReader(form.Encode()))
 
 	if err != nil {
 		return err
 	}
 
+	req.Host = "www.endclothing.com"
 	req.Header.Set("Accept", "*/*")
 	req.Header.Set("Accept-Language", "en-GB,en;q=0.5")
 	req.Header.Set("Connection", "keep-alive")
@@ -240,7 +249,6 @@ func (t *endTask) GetCookies() error {
 		cookies := resp.Cookies()
 
 		if len(cookies) > 0 {
-
 			jar, err := cookiejar.New(nil)
 
 			if err != nil {
