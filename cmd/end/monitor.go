@@ -334,6 +334,7 @@ func (t *endTask) GetSizes() (map[string]bool, error) {
 					if len(sizeOption.Values) > 0 {
 						sizesAvailable = true
 						for _, individualSize := range sizeOption.Values {
+							t.IndexMap[individualSize.Label] = individualSize.Index
 							sizeMap[individualSize.Label] = individualSize.InStock
 						}
 					}
@@ -357,13 +358,18 @@ func (t *endTask) GetSizes() (map[string]bool, error) {
 }
 
 func (t *endTask) CheckUpdate(sizeMap map[string]bool) {
+	restock := &restockObject{
+		SKU: t.ProductSKU,
+	}
 	updateAvailable := false
 	for size, stockAvailable := range sizeMap {
 		if sizeInstock, sizeExists := t.SizeMap[size]; sizeExists {
 			if !sizeInstock && stockAvailable {
+				restock.SizeArray = append(restock.SizeArray, t.IndexMap[size])
 				updateAvailable = true
 			}
 		} else if stockAvailable {
+			restock.SizeArray = append(restock.SizeArray, t.IndexMap[size])
 			updateAvailable = true
 		}
 	}
@@ -375,12 +381,46 @@ func (t *endTask) CheckUpdate(sizeMap map[string]bool) {
 			log.Printf("[INFO] Ignoring first run update - %v", t.ProductSKU)
 		} else {
 			log.Printf("[INFO] Update available - %v", t.ProductSKU)
+			go t.SendRestock(restock)
 			for _, webhookURL := range config.WebhookUrls {
 				go t.SendUpdate(webhookURL)
 			}
 		}
 	} else {
 		log.Printf("[INFO] No update available - %v", t.ProductSKU)
+	}
+}
+
+func (t *endTask) SendRestock(restock *restockObject) {
+	restockPayload, err := json.Marshal(restock)
+
+	if err != nil {
+		log.Printf("[ERROR] [RESTOCK SERVER] %v - %v", t.ProductSKU, err.Error())
+		return
+	}
+
+	req, err := http.NewRequest(http.MethodPost, config.RestockServer, bytes.NewBuffer(restockPayload))
+
+	if err != nil {
+		log.Printf("[ERROR] [RESTOCK SERVER] %v - %v", t.ProductSKU, err.Error())
+		return
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := client.Do(req)
+
+	if err != nil {
+		log.Printf("[ERROR] [RESTOCK SERVER] %v - %v", t.ProductSKU, err.Error())
+		return
+	}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode == 200 {
+		log.Printf("[SUCCESS] Restock sent - %v", t.ProductSKU)
+	} else {
+		log.Printf("[ERROR] [RESTOCK SERVER] Restock failed to send - %v - %v", resp.StatusCode, t.ProductSKU)
 	}
 }
 

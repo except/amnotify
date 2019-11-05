@@ -3,9 +3,10 @@ package main
 import "net/http"
 
 type endConfig struct {
-	ProductSKUs []string `json:"ProductSKUs"`
-	Proxies     []string `json:"Proxies"`
-	WebhookUrls []string `json:"WebhookUrls"`
+	ProductSKUs   []string `json:"ProductSKUs"`
+	Proxies       []string `json:"Proxies"`
+	WebhookUrls   []string `json:"WebhookUrls"`
+	RestockServer string   `json:"RestockServer"`
 }
 
 type endPayload struct {
@@ -26,7 +27,8 @@ type endTask struct {
 	Client      *http.Client
 	ProductInfo *endProdInfo
 
-	SizeMap map[string]bool
+	SizeMap  map[string]bool
+	IndexMap map[string]string
 }
 
 type endProduct struct {
@@ -49,6 +51,11 @@ type endProduct struct {
 			InStock bool   `json:"in_stock"`
 		} `json:"values"`
 	} `json:"options"`
+}
+
+type restockObject struct {
+	SKU       string   `json:"SKU"`
+	SizeArray []string `json:"sizeArray"`
 }
 
 type discordWebhook struct {

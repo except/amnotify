@@ -66,6 +66,7 @@ func createTask(productSKU string) *endTask {
 		ProductSKU:   productSKU,
 		FirstRun:     true,
 		SizeMap:      make(map[string]bool),
+		IndexMap:     make(map[string]string),
 		RequestCount: 0,
 		Client: &http.Client{
 			Timeout: 15 * time.Second,
