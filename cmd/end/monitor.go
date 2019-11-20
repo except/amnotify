@@ -48,6 +48,9 @@ func (t *endTask) Monitor() {
 			case errProductOOS:
 				if t.FirstRun {
 					t.FirstRun = false
+					for size := range t.SizeMap {
+						t.SizeMap[size] = false
+					}
 				}
 				log.Printf("[INFO] Product is out of stock, retrying - %v", t.ProductSKU)
 				// time.Sleep(1500 * time.Millisecond)
