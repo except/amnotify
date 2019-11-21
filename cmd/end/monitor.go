@@ -41,7 +41,7 @@ func (t *endTask) Monitor() {
 	log.Printf("[INFO] Starting task - %v", t.ProductSKU)
 
 	for {
-		productURL := fmt.Sprintf("https://distilnetworks.endservices.info/gb/rest/V1/end/products/sku/%v/", t.ProductSKU /*uniuri.NewLen(16), uniuri.NewLen(16) */)
+		productURL := fmt.Sprintf("https://distilnetworks.endservices.info/gb/rest/V1/end/products/sku/%v?afraidlabs=true", t.ProductSKU /*uniuri.NewLen(16), uniuri.NewLen(16) */)
 		t.PurgeURL(productURL)
 		sizeMap, err := t.GetSizes(productURL)
 
@@ -333,7 +333,7 @@ func (t *endTask) GetSizes(productURL string) (map[string]bool, error) {
 	}
 
 	req.Host = "api2.endclothing.com"
-	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Accept", fmt.Sprintf("application/json; %v", uniuri.NewLen(8)))
 	req.Header.Set("Accept-Language", "en-GB,en;q=0.5")
 	req.Header.Set("Connection", "keep-alive")
 	req.Header.Set("Referer", "https://www.endclothing.com/gb/")
