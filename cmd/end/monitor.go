@@ -41,7 +41,9 @@ func (t *endTask) Monitor() {
 	log.Printf("[INFO] Starting task - %v", t.ProductSKU)
 
 	for {
-		sizeMap, err := t.GetSizes()
+		productURL := fmt.Sprintf("https://distilnetworks.endservices.info/gb/rest/V1/end/products/sku/%v/", t.ProductSKU /*uniuri.NewLen(16), uniuri.NewLen(16) */)
+		t.PurgeURL(productURL)
+		sizeMap, err := t.GetSizes(productURL)
 
 		if err != nil {
 			switch err {
@@ -261,7 +263,7 @@ func (t *endTask) GetCookies() error {
 	return errChallengeFailed
 }
 
-func (t *endTask) GetSizes() (map[string]bool, error) {
+func (t *endTask) PurgeURL(productURL string) {
 	if t.RequestCount%25 == 0 || t.RequestCount == 0 {
 		t.SetProxy()
 		err := t.GetCookies()
@@ -272,7 +274,59 @@ func (t *endTask) GetSizes() (map[string]bool, error) {
 		}
 	}
 
-	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("https://distilnetworks.endservices.info/gb/rest/V1/end/products/sku/%v?/%v=%v", t.ProductSKU, uniuri.NewLen(16), uniuri.NewLen(16)), nil)
+	req, err := http.NewRequest("PURGE", productURL, nil)
+
+	if err != nil {
+		return
+	}
+
+	req.Host = "api2.endclothing.com"
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Accept-Language", "en-GB,en;q=0.5")
+	req.Header.Set("Connection", "keep-alive")
+	req.Header.Set("Referer", "https://www.endclothing.com/gb/")
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0")
+
+	if t.Client.Jar != nil {
+		cookies := t.Client.Jar.Cookies(siteURL)
+		cookieArr := []string{}
+
+		for _, cookie := range cookies {
+			cookieArr = append(cookieArr, fmt.Sprintf("%v=%v;", cookie.Name, cookie.Value))
+		}
+
+		req.Header.Set("Cookie", strings.Join(cookieArr, ","))
+	}
+
+	resp, err := t.Client.Do(req)
+
+	if err != nil {
+		return
+	}
+
+	defer resp.Body.Close()
+
+	t.RequestCount++
+
+	if resp.StatusCode == 200 {
+		log.Printf("[INFO] Purged URL - %v - %v", t.ProductSKU, productURL)
+	} else {
+		log.Printf("[WARN] Failed to Purge URL - %v - %v", t.ProductSKU, productURL)
+	}
+}
+
+func (t *endTask) GetSizes(productURL string) (map[string]bool, error) {
+	if t.RequestCount%25 == 0 || t.RequestCount == 0 {
+		t.SetProxy()
+		err := t.GetCookies()
+		if err != nil {
+			log.Printf("[ERROR] Unhandled Error (Challenge) - %v - %v", err.Error(), t.ProductSKU)
+		} else {
+			log.Printf("[INFO] Set Distil Cookies - %v", t.ProductSKU)
+		}
+	}
+
+	req, err := http.NewRequest(http.MethodGet, productURL, nil)
 
 	if err != nil {
 		return nil, err
