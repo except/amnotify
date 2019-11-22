@@ -41,8 +41,8 @@ func (t *endTask) Monitor() {
 	log.Printf("[INFO] Starting task - %v", t.ProductSKU)
 
 	for {
-		productURL := fmt.Sprintf("https://distilnetworks.endservices.info/gb/rest/V1/end/products/sku/%v?afraidlabs=true", t.ProductSKU /*uniuri.NewLen(16), uniuri.NewLen(16) */)
-		t.PurgeURL(productURL)
+		productURL := fmt.Sprintf("https://distilnetworks.endservices.info/gb/rest/V1/end/products/sku/%v?%v=%v", t.ProductSKU, uniuri.NewLen(16), uniuri.NewLen(16))
+		// t.PurgeURL(productURL)
 		sizeMap, err := t.GetSizes(productURL)
 
 		if err != nil {
