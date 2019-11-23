@@ -22,6 +22,8 @@ var (
 	cookies = &endCookies{
 		Map: make(map[string]time.Time),
 	}
+
+	cookieArray []string
 )
 
 func init() {
@@ -67,7 +69,7 @@ func init() {
 		log.Printf("[ERROR] [COOKIE] %v", err.Error())
 	}
 
-	err = json.Unmarshal(cookieBytes, &cookies.CookieArray)
+	err = json.Unmarshal(cookieBytes, &cookieArray)
 
 	if err != nil {
 		log.Printf("[ERROR] [COOKIE] %v", err.Error())
@@ -77,7 +79,7 @@ func init() {
 		panic(err)
 	}
 
-	for _, cookie := range cookies.CookieArray {
+	for _, cookie := range cookieArray {
 		cookies.Map[cookie] = time.Now()
 	}
 

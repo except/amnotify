@@ -14,10 +14,8 @@ type endConfig struct {
 }
 
 type endCookies struct {
-	mu sync.Mutex
-
-	CookieArray []string
-	Map         map[string]time.Time
+	mu  sync.Mutex
+	Map map[string]time.Time
 }
 
 type endPayload struct {
