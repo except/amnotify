@@ -2,11 +2,22 @@ package main
 
 import "net/http"
 
+import "time"
+
+import "sync"
+
 type endConfig struct {
 	ProductSKUs   []string `json:"ProductSKUs"`
 	Proxies       []string `json:"Proxies"`
 	WebhookUrls   []string `json:"WebhookUrls"`
 	RestockServer string   `json:"RestockServer"`
+}
+
+type endCookies struct {
+	mu sync.Mutex
+
+	CookieArray []string
+	Map         map[string]time.Time
 }
 
 type endPayload struct {
@@ -19,6 +30,7 @@ type endProdInfo struct {
 }
 
 type endTask struct {
+	Cookies    string
 	ProductSKU string
 
 	FirstRun     bool

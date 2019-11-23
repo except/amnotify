@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
 	"sync"
@@ -14,13 +15,18 @@ import (
 var (
 	wg     sync.WaitGroup
 	config endConfig
-
 	client = &http.Client{
 		Timeout: 20 * time.Second,
+	}
+
+	cookies = &endCookies{
+		Map: make(map[string]time.Time),
 	}
 )
 
 func init() {
+	rand.Seed(time.Now().UTC().UnixNano())
+
 	log.SetFlags(log.LstdFlags | log.Lmicroseconds)
 
 	configFile, err := os.Open("config.json")
@@ -46,6 +52,36 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
+
+	cookieFile, err := os.Open("cookieArray.json")
+
+	if err != nil {
+		log.Printf("[ERROR] [COOKIE] %v", err.Error())
+	}
+
+	defer cookieFile.Close()
+
+	cookieBytes, err := ioutil.ReadAll(cookieFile)
+
+	if err != nil {
+		log.Printf("[ERROR] [COOKIE] %v", err.Error())
+	}
+
+	err = json.Unmarshal(cookieBytes, &cookies.CookieArray)
+
+	if err != nil {
+		log.Printf("[ERROR] [COOKIE] %v", err.Error())
+	}
+
+	if err != nil {
+		panic(err)
+	}
+
+	for _, cookie := range cookies.CookieArray {
+		cookies.Map[cookie] = time.Now()
+	}
+
+	return
 }
 
 func main() {

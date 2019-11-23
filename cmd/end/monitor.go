@@ -9,7 +9,6 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
-	"net/http/cookiejar"
 	"net/url"
 	"sort"
 	"strconv"
@@ -74,26 +73,14 @@ func (t *endTask) Monitor() {
 			case errTaskBanned:
 				log.Printf("[WARN] Task is banned, retrying - %v", t.ProductSKU)
 				t.SetProxy()
-				challengeErr := t.GetCookies()
-				if challengeErr == nil {
-					log.Printf("[INFO] Set Distil Cookies - %v", t.ProductSKU)
-					t.RequestCount = 1
-				} else {
-					log.Printf("[ERROR] Unhandled Error (Challenge) - %v - %v", challengeErr.Error(), t.ProductSKU)
-				}
+				t.GetCookies()
 
 				time.Sleep(2500 * time.Millisecond)
 				continue
 			default:
 				log.Printf("[ERROR] Unhandled Error - %v - %v", err.Error(), t.ProductSKU)
 				t.SetProxy()
-				challengeErr := t.GetCookies()
-				if challengeErr == nil {
-					log.Printf("[INFO] Set Distil Cookies - %v", t.ProductSKU)
-					t.RequestCount = 1
-				} else {
-					log.Printf("[ERROR] Unhandled Error (Challenge) - %v - %v", challengeErr.Error(), t.ProductSKU)
-				}
+				t.GetCookies()
 				time.Sleep(2500 * time.Millisecond)
 				continue
 			}
@@ -169,161 +156,109 @@ func (t *endTask) GetChallengeLocation() (string, error) {
 	return "", errChallengeNoPath
 }
 
-func (t *endTask) GetPayload() (string, error) {
-	req, err := http.NewRequest(http.MethodGet, "http://production.c9ext2p5vs.eu-west-2.elasticbeanstalk.com/generate", nil)
+// func (t *endTask) GetPayload() (string, error) {
+// 	req, err := http.NewRequest(http.MethodGet, "http://production.c9ext2p5vs.eu-west-2.elasticbeanstalk.com/generate", nil)
 
-	if err != nil {
-		return "", err
-	}
+// 	if err != nil {
+// 		return "", err
+// 	}
 
-	req.Header.Set("X-Distil-API-Key", "6d9be079-d581-421f-a584-960b64dd652d")
+// 	req.Header.Set("X-Distil-API-Key", "6d9be079-d581-421f-a584-960b64dd652d")
 
-	resp, err := client.Do(req)
+// 	resp, err := client.Do(req)
 
-	if err != nil {
-		return "", err
-	}
+// 	if err != nil {
+// 		return "", err
+// 	}
 
-	defer resp.Body.Close()
+// 	defer resp.Body.Close()
 
-	switch resp.StatusCode {
-	case 200:
-		var payloadResponse endPayload
-		err := json.NewDecoder(resp.Body).Decode(&payloadResponse)
+// 	switch resp.StatusCode {
+// 	case 200:
+// 		var payloadResponse endPayload
+// 		err := json.NewDecoder(resp.Body).Decode(&payloadResponse)
 
-		if err != nil {
-			return "", err
-		}
+// 		if err != nil {
+// 			return "", err
+// 		}
 
-		if payloadResponse.Success {
-			return payloadResponse.Payload, nil
-		}
-	}
+// 		if payloadResponse.Success {
+// 			return payloadResponse.Payload, nil
+// 		}
+// 	}
 
-	return "", errChallengeFailed
-}
+// 	return "", errChallengeFailed
+// }
 
-func (t *endTask) GetCookies() error {
-	t.Client.Jar = nil
-	challengePath, err := t.GetChallengeLocation()
+// func (t *endTask) GetCookies() error {
+// 	t.Client.Jar = nil
+// 	challengePath, err := t.GetChallengeLocation()
 
-	if err != nil {
-		return err
-	}
+// 	if err != nil {
+// 		return err
+// 	}
 
-	payload, err := t.GetPayload()
+// 	payload, err := t.GetPayload()
 
-	if err != nil {
-		return err
-	}
+// 	if err != nil {
+// 		return err
+// 	}
 
-	form := url.Values{}
+// 	form := url.Values{}
 
-	form.Add("p", payload)
+// 	form.Add("p", payload)
 
-	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("https://distilnetworks.endservices.info%v", challengePath), strings.NewReader(form.Encode()))
+// 	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("https://distilnetworks.endservices.info%v", challengePath), strings.NewReader(form.Encode()))
 
-	if err != nil {
-		return err
-	}
+// 	if err != nil {
+// 		return err
+// 	}
 
-	req.Host = "www.endclothing.com"
-	req.Header.Set("Accept", "*/*")
-	req.Header.Set("Accept-Language", "en-GB,en;q=0.5")
-	req.Header.Set("Connection", "keep-alive")
-	req.Header.Set("Referer", "https://www.endclothing.com/gb/")
-	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0")
+// 	req.Host = "www.endclothing.com"
+// 	req.Header.Set("Accept", "*/*")
+// 	req.Header.Set("Accept-Language", "en-GB,en;q=0.5")
+// 	req.Header.Set("Connection", "keep-alive")
+// 	req.Header.Set("Referer", "https://www.endclothing.com/gb/")
+// 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0")
 
-	resp, err := t.Client.Do(req)
+// 	resp, err := t.Client.Do(req)
 
-	if err != nil {
-		return err
-	}
+// 	if err != nil {
+// 		return err
+// 	}
 
-	defer resp.Body.Close()
+// 	defer resp.Body.Close()
 
-	switch resp.StatusCode {
-	case 200:
-		cookies := resp.Cookies()
+// 	switch resp.StatusCode {
+// 	case 200:
+// 		cookies := resp.Cookies()
 
-		if len(cookies) > 0 {
-			jar, err := cookiejar.New(nil)
+// 		if len(cookies) > 0 {
+// 			jar, err := cookiejar.New(nil)
 
-			if err != nil {
-				return err
-			}
+// 			if err != nil {
+// 				return err
+// 			}
 
-			jar.SetCookies(siteURL, cookies)
+// 			jar.SetCookies(siteURL, cookies)
 
-			t.Client.Jar = jar
-			return nil
-		}
-	}
+// 			t.Client.Jar = jar
+// 			return nil
+// 		}
+// 	}
 
-	return errChallengeFailed
-}
+// 	return errChallengeFailed
+// }
 
-func (t *endTask) PurgeURL(productURL string) {
-	if t.RequestCount%25 == 0 || t.RequestCount == 0 {
-		t.SetProxy()
-		err := t.GetCookies()
-		if err != nil {
-			log.Printf("[ERROR] Unhandled Error (Challenge) - %v - %v", err.Error(), t.ProductSKU)
-		} else {
-			log.Printf("[INFO] Set Distil Cookies - %v", t.ProductSKU)
-		}
-	}
-
-	req, err := http.NewRequest("PURGE", productURL, nil)
-
-	if err != nil {
-		return
-	}
-
-	req.Host = "api2.endclothing.com"
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Accept-Language", "en-GB,en;q=0.5")
-	req.Header.Set("Connection", "keep-alive")
-	req.Header.Set("Referer", "https://www.endclothing.com/gb/")
-	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0")
-
-	if t.Client.Jar != nil {
-		cookies := t.Client.Jar.Cookies(siteURL)
-		cookieArr := []string{}
-
-		for _, cookie := range cookies {
-			cookieArr = append(cookieArr, fmt.Sprintf("%v=%v;", cookie.Name, cookie.Value))
-		}
-
-		req.Header.Set("Cookie", strings.Join(cookieArr, ","))
-	}
-
-	resp, err := t.Client.Do(req)
-
-	if err != nil {
-		return
-	}
-
-	defer resp.Body.Close()
-
-	t.RequestCount++
-
-	if resp.StatusCode == 200 {
-		log.Printf("[INFO] Purged URL - %v - %v", t.ProductSKU, productURL)
-	} else {
-		log.Printf("[WARN] Failed to Purge URL - %v - %v", t.ProductSKU, productURL)
-	}
+func (t *endTask) GetCookies() {
+	t.Cookies = cookies.GetCookieSet(t.ProductSKU)
+	log.Printf("[INFO] Obtained Cookie Set - %v", t.ProductSKU)
 }
 
 func (t *endTask) GetSizes(productURL string) (map[string]bool, error) {
 	if t.RequestCount%25 == 0 || t.RequestCount == 0 {
 		t.SetProxy()
-		err := t.GetCookies()
-		if err != nil {
-			log.Printf("[ERROR] Unhandled Error (Challenge) - %v - %v", err.Error(), t.ProductSKU)
-		} else {
-			log.Printf("[INFO] Set Distil Cookies - %v", t.ProductSKU)
-		}
+		t.GetCookies()
 	}
 
 	req, err := http.NewRequest(http.MethodGet, productURL, nil)
@@ -338,17 +273,7 @@ func (t *endTask) GetSizes(productURL string) (map[string]bool, error) {
 	req.Header.Set("Connection", "keep-alive")
 	req.Header.Set("Referer", "https://www.endclothing.com/gb/")
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0")
-
-	if t.Client.Jar != nil {
-		cookies := t.Client.Jar.Cookies(siteURL)
-		cookieArr := []string{}
-
-		for _, cookie := range cookies {
-			cookieArr = append(cookieArr, fmt.Sprintf("%v=%v;", cookie.Name, cookie.Value))
-		}
-
-		req.Header.Set("Cookie", strings.Join(cookieArr, ","))
-	}
+	req.Header.Set("Cookie", t.Cookies)
 
 	resp, err := t.Client.Do(req)
 
