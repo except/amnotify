@@ -29,13 +29,13 @@ var (
 	errChallengeNoPath = errors.New("Failed to complete challenge - Path not found")
 	errChallengeFailed = errors.New("Failed to complete challenge")
 
-	siteURL, siteURLErr = url.Parse("https://api2.endclothing.com")
+	// siteURL, siteURLErr = url.Parse("https://api2.endclothing.com")
 )
 
 func (t *endTask) Monitor() {
-	if siteURLErr != nil {
-		panic(siteURLErr)
-	}
+	// if siteURLErr != nil {
+	// 	panic(siteURLErr)
+	// }
 
 	log.Printf("[INFO] Starting task - %v", t.ProductSKU)
 
@@ -267,8 +267,8 @@ func (t *endTask) GetSizes(productURL string) (map[string]bool, error) {
 		return nil, err
 	}
 
-	req.Host = "api2.endclothing.com"
-	req.Header.Set("Accept", fmt.Sprintf("application/json; %v", uniuri.NewLen(8)))
+	req.Host = "www.endclothing.com"
+	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Accept-Language", "en-GB,en;q=0.5")
 	req.Header.Set("Connection", "keep-alive")
 	req.Header.Set("Referer", "https://www.endclothing.com/gb/")

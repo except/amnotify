@@ -40,7 +40,7 @@ func (p *sbxProduct) launchMonitor() {
 			}
 		}
 
-		time.Sleep(50 * time.Millisecond)
+		// time.Sleep(50 * time.Millisecond)
 	}
 }
 
@@ -67,12 +67,20 @@ func (p *sbxProduct) setProxy() {
 }
 
 func (p *sbxProduct) getSizes() ([]*sbxSize, error) {
-	productURL := strings.Replace(p.URL, "www.solebox.com", "cdn.solebox.com", 1)
+	// productURL := strings.Replace(p.URL, "www.solebox.com", "cdn.solebox.com", 1)
 
-	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%v?%v=%v", productURL, uniuri.NewLen(8), uniuri.NewLen(8)), nil)
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%v?%v=%v", p.URL, uniuri.NewLen(8), uniuri.NewLen(8)), nil)
 
 	req.Header.Set(uniuri.NewLen(32), uniuri.NewLen(32))
-	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36")
+	req.Header.Set("Cache-Control", "max-age=0")
+	req.Header.Set("Upgrade-Insecure-Requests", "1")
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36")
+	req.Header.Set("Sec-Fetch-User", "?1")
+	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3")
+	req.Header.Set("Sec-Fetch-Site", "none")
+	req.Header.Set("Sec-Fetch-Mode", "navigate")
+	req.Header.Set("Accept-Language", "en-GB,en-US;q=0.9,en;q=0.8")
+	req.Header.Set("Cookie", "language=0; displayedCookiesNotification=1")
 
 	if err != nil {
 		return nil, err
@@ -142,6 +150,8 @@ func (p *sbxProduct) getSizes() ([]*sbxSize, error) {
 
 		return nil, nil
 	}
+
+	fmt.Println(resp.Header)
 
 	return nil, fmt.Errorf("Invalid Status Code - %v", resp.StatusCode)
 }
