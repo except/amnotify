@@ -251,7 +251,6 @@ func (t *endTask) GetChallengeLocation() (string, error) {
 // }
 
 func (t *endTask) GetCookies() {
-	log.Printf("[INFO] Obtaining Cookie Set - %v", t.ProductSKU)
 	t.Cookies = cookies.GetCookieSet(t.ProductSKU)
 	log.Printf("[INFO] Obtained Cookie Set - %v", t.ProductSKU)
 }
