@@ -117,7 +117,7 @@ func (t *endTask) SetProxy() {
 
 		log.Printf("[INFO] Running Proxy (%v) - %v", proxyURL.String(), t.ProductSKU)
 	} else {
-		log.Printf("[WARN] Running Proxyless - %v", t.ProductSKU)
+		// log.Printf("[WARN] Running Proxyless - %v", t.ProductSKU)
 	}
 }
 
@@ -281,7 +281,7 @@ func (t *endTask) GetSizes(productURL string) (map[string]bool, error) {
 			t.LatencyArray = []int64{}
 
 			if float64(currentAvgLatency)/float64(t.PrevAvgLatency) < 0.7 {
-				log.Printf("[WARN] Substantial Average Latency Drop - %vms to %vms - %v", t.PrevAvgLatency, currentAvgLatency, t.ProductSKU)
+				log.Printf("[WARN] Substantial Average Latency Drop - %vms -> %vms - %v", t.PrevAvgLatency, currentAvgLatency, t.ProductSKU)
 				for _, webhookURL := range config.WebhookUrls {
 					go t.AlertLatency(webhookURL, currentAvgLatency, t.PrevAvgLatency)
 				}
