@@ -72,14 +72,14 @@ func (t *endTask) Monitor() {
 				continue
 			case errTaskBanned:
 				log.Printf("[WARN] Task is banned, retrying - %v", t.ProductSKU)
-				t.SetProxy()
+				// t.SetProxy()
 				t.GetCookies()
 
 				time.Sleep(2500 * time.Millisecond)
 				continue
 			default:
 				log.Printf("[ERROR] Unhandled Error - %v - %v", err.Error(), t.ProductSKU)
-				t.SetProxy()
+				// t.SetProxy()
 				t.GetCookies()
 				time.Sleep(2500 * time.Millisecond)
 				continue
@@ -251,6 +251,7 @@ func (t *endTask) GetChallengeLocation() (string, error) {
 // }
 
 func (t *endTask) GetCookies() {
+	log.Printf("[INFO] Obtaining Cookie Set - %v", t.ProductSKU)
 	t.Cookies = cookies.GetCookieSet(t.ProductSKU)
 	log.Printf("[INFO] Obtained Cookie Set - %v", t.ProductSKU)
 }
@@ -292,7 +293,7 @@ func (t *endTask) GetSizes(productURL string) (map[string]bool, error) {
 			t.PrevAvgLatency = currentAvgLatency
 		}
 
-		t.SetProxy()
+		// t.SetProxy()
 		t.GetCookies()
 	}
 
