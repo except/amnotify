@@ -31,11 +31,14 @@ type endTask struct {
 	Cookies    string
 	ProductSKU string
 
-	FirstRun     bool
-	RequestCount int
+	FirstRun       bool
+	RequestCount   int
+	PrevAvgLatency int64
 
 	Client      *http.Client
 	ProductInfo *endProdInfo
+
+	LatencyArray []int64
 
 	SizeMap  map[string]bool
 	IndexMap map[string]string
@@ -73,25 +76,25 @@ type discordWebhook struct {
 }
 
 type discordEmbed struct {
-	Title     string                `json:"title"`
-	URL       string                `json:"url"`
-	Color     int                   `json:"color"`
-	Footer    discordEmbedFooter    `json:"footer"`
-	Thumbnail discordEmbedThumbnail `json:"thumbnail"`
-	Fields    []discordEmbedField   `json:"fields"`
+	Title     string                `json:"title,omitempty"`
+	URL       string                `json:"url,omitempty"`
+	Color     int                   `json:"color,omitempty"`
+	Footer    discordEmbedFooter    `json:"footer,omitempty"`
+	Thumbnail discordEmbedThumbnail `json:"thumbnail,omitempty"`
+	Fields    []discordEmbedField   `json:"fields,omitempty"`
 }
 
 type discordEmbedFooter struct {
-	IconURL string `json:"icon_url"`
-	Text    string `json:"text"`
+	IconURL string `json:"icon_url,omitempty"`
+	Text    string `json:"text,omitempty"`
 }
 
 type discordEmbedThumbnail struct {
-	URL string `json:"url"`
+	URL string `json:"url,omitempty"`
 }
 
 type discordEmbedField struct {
-	Name   string `json:"name"`
-	Value  string `json:"value"`
-	Inline bool   `json:"inline"`
+	Name   string `json:"name,omitempty"`
+	Value  string `json:"value,omitempty"`
+	Inline bool   `json:"inline,omitempty"`
 }

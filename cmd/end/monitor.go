@@ -53,21 +53,21 @@ func (t *endTask) Monitor() {
 						t.SizeMap[size] = false
 					}
 				}
-				log.Printf("[INFO] Product is out of stock, retrying - %v", t.ProductSKU)
+				// log.Printf("[INFO] Product is out of stock, retrying - %v", t.ProductSKU)
 				// time.Sleep(1500 * time.Millisecond)
 				continue
 			case errProductNoSizes:
 				if t.FirstRun {
 					t.FirstRun = false
 				}
-				log.Printf("[INFO] Product has no available sizes, retrying - %v", t.ProductSKU)
+				// log.Printf("[INFO] Product has no available sizes, retrying - %v", t.ProductSKU)
 				// time.Sleep(1500 * time.Millisecond)
 				continue
 			case errProductNotLoaded:
 				if t.FirstRun {
 					t.FirstRun = false
 				}
-				log.Printf("[INFO] Product is not loaded, retrying - %v", t.ProductSKU)
+				// log.Printf("[INFO] Product is not loaded, retrying - %v", t.ProductSKU)
 				// time.Sleep(1500 * time.Millisecond)
 				continue
 			case errTaskBanned:
@@ -106,7 +106,7 @@ func (t *endTask) SetProxy() {
 
 		if err != nil {
 			log.Printf("Error %v - %v", t.ProductSKU, err.Error())
-			log.Printf("[WARN] Running Proxyless - %v", t.ProductSKU)
+			// log.Printf("[WARN] Running Proxyless - %v", t.ProductSKU)
 			return
 		}
 
@@ -257,6 +257,41 @@ func (t *endTask) GetCookies() {
 
 func (t *endTask) GetSizes(productURL string) (map[string]bool, error) {
 	if t.RequestCount%25 == 0 || t.RequestCount == 0 {
+
+		switch t.RequestCount {
+		case 0:
+			break
+		case 25:
+			var totalLatency int64
+			for _, latency := range t.LatencyArray {
+				totalLatency += latency
+			}
+
+			t.PrevAvgLatency = totalLatency / int64(len(t.LatencyArray))
+			t.LatencyArray = []int64{}
+			log.Printf("[INFO] Gathered First Latency Average - %vms - %v", t.PrevAvgLatency, t.ProductSKU)
+			break
+		default:
+			var totalLatency int64
+			for _, latency := range t.LatencyArray {
+				totalLatency += latency
+			}
+
+			currentAvgLatency := totalLatency / int64(len(t.LatencyArray))
+			t.LatencyArray = []int64{}
+
+			if float64(currentAvgLatency)/float64(t.PrevAvgLatency) < 0.7 {
+				log.Printf("[WARN] Substantial Average Latency Drop - %vms to %vms - %v", t.PrevAvgLatency, currentAvgLatency, t.ProductSKU)
+				for _, webhookURL := range config.WebhookUrls {
+					go t.AlertLatency(webhookURL, currentAvgLatency, t.PrevAvgLatency)
+				}
+			} else {
+				log.Printf("[INFO] Normal Latency - %vms -> %vms - %v", t.PrevAvgLatency, currentAvgLatency, t.ProductSKU)
+			}
+
+			t.PrevAvgLatency = currentAvgLatency
+		}
+
 		t.SetProxy()
 		t.GetCookies()
 	}
@@ -275,6 +310,7 @@ func (t *endTask) GetSizes(productURL string) (map[string]bool, error) {
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0")
 	req.Header.Set("Cookie", t.Cookies)
 
+	startTime := time.Now()
 	resp, err := t.Client.Do(req)
 
 	if err != nil {
@@ -282,6 +318,8 @@ func (t *endTask) GetSizes(productURL string) (map[string]bool, error) {
 	}
 
 	defer resp.Body.Close()
+
+	t.LatencyArray = append(t.LatencyArray, int64(time.Since(startTime)/time.Millisecond))
 
 	t.RequestCount++
 
@@ -495,6 +533,70 @@ func (t *endTask) SendUpdate(webhookURL string) {
 		log.Printf("[WARN] Retrying, webhook ratelimit - %v", t.ProductSKU)
 		time.Sleep(5 * time.Second)
 		t.SendUpdate(webhookURL)
+	} else {
+		log.Printf("[WARN] Invalid Status - %v - %v", t.ProductSKU, resp.Status)
+	}
+}
+
+func (t *endTask) AlertLatency(webhookURL string, currentAvgLatency, previousAvgLatency int64) {
+	webhook := &discordWebhook{}
+
+	webhookEmbed := discordEmbed{
+		Title: fmt.Sprintf("END. Alert | %v", t.ProductSKU),
+		Color: 16711680,
+	}
+
+	webhookEmbed.Fields = append(webhookEmbed.Fields, discordEmbedField{
+		Name:   "Previous Latency",
+		Value:  fmt.Sprintf("%vms", previousAvgLatency),
+		Inline: false,
+	})
+
+	webhookEmbed.Fields = append(webhookEmbed.Fields, discordEmbedField{
+		Name:   "Current Latency",
+		Value:  fmt.Sprintf("%vms", currentAvgLatency),
+		Inline: false,
+	})
+
+	webhookEmbed.Fields = append(webhookEmbed.Fields, discordEmbedField{
+		Name:   "Percentage Drop",
+		Value:  fmt.Sprintf("%v%v", 100*(1-(float64(currentAvgLatency)/float64(previousAvgLatency))), "%"),
+		Inline: false,
+	})
+
+	webhook.Embeds = append(webhook.Embeds, webhookEmbed)
+
+	webhookPayload, err := json.Marshal(webhook)
+
+	if err != nil {
+		log.Printf("[ERROR] [WEBHOOK ALERT] %v - %v", t.ProductSKU, err.Error())
+		return
+	}
+
+	req, err := http.NewRequest(http.MethodPost, webhookURL, bytes.NewBuffer(webhookPayload))
+
+	if err != nil {
+		log.Printf("[ERROR] [WEBHOOK ALERT] %v - %v", t.ProductSKU, err.Error())
+		return
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := client.Do(req)
+
+	if err != nil {
+		log.Printf("[ERROR] [WEBHOOK ALERT] %v - %v", t.ProductSKU, err.Error())
+		return
+	}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode == 204 {
+		log.Printf("[SUCCESS] Alert Webhook Sent - %v", t.ProductSKU)
+	} else if resp.StatusCode == 429 {
+		log.Printf("[WARN] Retrying, Alert Webhook Ratelimit - %v", t.ProductSKU)
+		time.Sleep(5 * time.Second)
+		t.AlertLatency(webhookURL, currentAvgLatency, previousAvgLatency)
 	} else {
 		log.Printf("[WARN] Invalid Status - %v - %v", t.ProductSKU, resp.Status)
 	}
