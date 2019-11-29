@@ -280,7 +280,7 @@ func (t *endTask) GetSizes(productURL string) (map[string]bool, error) {
 			currentAvgLatency := totalLatency / int64(len(t.LatencyArray))
 			t.LatencyArray = []int64{}
 
-			if float64(currentAvgLatency)/float64(t.PrevAvgLatency) < 0.5 {
+			if float64(currentAvgLatency)/float64(t.PrevAvgLatency) < 0.3 && currentAvgLatency < 150 {
 				log.Printf("[WARN] Substantial Average Latency Drop - %vms -> %vms - %v", t.PrevAvgLatency, currentAvgLatency, t.ProductSKU)
 				for _, webhookURL := range config.WebhookUrls {
 					go t.AlertLatency(webhookURL, currentAvgLatency, t.PrevAvgLatency)
