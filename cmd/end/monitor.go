@@ -2,20 +2,16 @@ package main
 
 import (
 	"bytes"
-	"crypto/tls"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
-	"math/rand"
 	"net/http"
-	"net/url"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/PuerkitoBio/goquery"
 	"github.com/dchest/uniuri"
 )
 
@@ -28,15 +24,9 @@ var (
 
 	errChallengeNoPath = errors.New("Failed to complete challenge - Path not found")
 	errChallengeFailed = errors.New("Failed to complete challenge")
-
-	// siteURL, siteURLErr = url.Parse("https://api2.endclothing.com")
 )
 
 func (t *endTask) Monitor() {
-	// if siteURLErr != nil {
-	// 	panic(siteURLErr)
-	// }
-
 	log.Printf("[INFO] Starting task - %v", t.ProductSKU)
 
 	for {
@@ -98,63 +88,63 @@ func (t *endTask) Monitor() {
 	}
 }
 
-func (t *endTask) SetProxy() {
-	if len(config.Proxies) > 0 {
-		proxy := config.Proxies[rand.Intn(len(config.Proxies))]
+// func (t *endTask) SetProxy() {
+// 	if len(config.Proxies) > 0 {
+// 		proxy := config.Proxies[rand.Intn(len(config.Proxies))]
 
-		proxyURL, err := url.Parse(proxy)
+// 		proxyURL, err := url.Parse(proxy)
 
-		if err != nil {
-			log.Printf("Error %v - %v", t.ProductSKU, err.Error())
-			// log.Printf("[WARN] Running Proxyless - %v", t.ProductSKU)
-			return
-		}
+// 		if err != nil {
+// 			log.Printf("Error %v - %v", t.ProductSKU, err.Error())
+// 			// log.Printf("[WARN] Running Proxyless - %v", t.ProductSKU)
+// 			return
+// 		}
 
-		t.Client.Transport = &http.Transport{
-			Proxy:           http.ProxyURL(proxyURL),
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-		}
+// 		t.Client.Transport = &http.Transport{
+// 			Proxy:           http.ProxyURL(proxyURL),
+// 			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+// 		}
 
-		log.Printf("[INFO] Running Proxy (%v) - %v", proxyURL.String(), t.ProductSKU)
-	} else {
-		// log.Printf("[WARN] Running Proxyless - %v", t.ProductSKU)
-	}
-}
+// 		log.Printf("[INFO] Running Proxy (%v) - %v", proxyURL.String(), t.ProductSKU)
+// 	} else {
+// 		// log.Printf("[WARN] Running Proxyless - %v", t.ProductSKU)
+// 	}
+// }
 
-func (t *endTask) GetChallengeLocation() (string, error) {
-	req, err := http.NewRequest(http.MethodGet, "https://distilnetworks.endservices.info", nil)
+// func (t *endTask) GetChallengeLocation() (string, error) {
+// 	req, err := http.NewRequest(http.MethodGet, "https://distilnetworks.endservices.info", nil)
 
-	if err != nil {
-		return "", err
-	}
+// 	if err != nil {
+// 		return "", err
+// 	}
 
-	req.Host = "www.endclothing.com"
-	req.Header.Set("Accept", "*/*")
-	req.Header.Set("Accept-Language", "en-GB,en;q=0.5")
-	req.Header.Set("Connection", "keep-alive")
-	req.Header.Set("Referer", "https://www.endclothing.com")
-	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0")
+// 	req.Host = "www.endclothing.com"
+// 	req.Header.Set("Accept", "*/*")
+// 	req.Header.Set("Accept-Language", "en-GB,en;q=0.5")
+// 	req.Header.Set("Connection", "keep-alive")
+// 	req.Header.Set("Referer", "https://www.endclothing.com")
+// 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0")
 
-	resp, err := t.Client.Do(req)
+// 	resp, err := t.Client.Do(req)
 
-	if err != nil {
-		return "", err
-	}
+// 	if err != nil {
+// 		return "", err
+// 	}
 
-	defer resp.Body.Close()
+// 	defer resp.Body.Close()
 
-	html, err := goquery.NewDocumentFromReader(resp.Body)
+// 	html, err := goquery.NewDocumentFromReader(resp.Body)
 
-	if err != nil {
-		return "", err
-	}
+// 	if err != nil {
+// 		return "", err
+// 	}
 
-	if val, ok := html.Find(`script[src^="/ec"]`).Attr("src"); ok {
-		return val, nil
-	}
+// 	if val, ok := html.Find(`script[src^="/ec"]`).Attr("src"); ok {
+// 		return val, nil
+// 	}
 
-	return "", errChallengeNoPath
-}
+// 	return "", errChallengeNoPath
+// }
 
 // func (t *endTask) GetPayload() (string, error) {
 // 	req, err := http.NewRequest(http.MethodGet, "http://production.c9ext2p5vs.eu-west-2.elasticbeanstalk.com/generate", nil)
